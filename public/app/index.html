@@ -9,13 +9,12 @@
 <!--
   Trabajitos MVP (concept): variant D from prototypes/trabajitos-confianza.prototype.html.
   Fake data, in-memory state, no backend. Tegucigalpa, Honduras (Lempiras, colonias).
-  Variants A/B/C code is still inline; to be removed in the refine pass.
 -->
 <style>
 :root{--bg:#f6f3ec;--card:#fff;--ink:#1c2420;--muted:#65706a;--line:#e3ddd1;--brand:#0e6b57;--brand-2:#0a5544;--brand-soft:#e2f0ea;--pend:#8a5a00;--pend-soft:#fdf1d8;--star:#d99a00;--radius:14px}
 *{box-sizing:border-box}
 html,body{margin:0}
-body{background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:120px}
+body{background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:24px}
 h1{font-size:26px;line-height:1.2;margin:18px 0 6px;letter-spacing:-.01em}
 h2{font-size:19px;margin:18px 0 12px}
 h3{font-size:16px;margin:0 0 10px}
@@ -24,9 +23,6 @@ button{cursor:pointer}
 .wrap{max-width:1040px;margin:0 auto;padding:0 16px}
 .narrow{max-width:640px}
 .muted{color:var(--muted)} .sm{font-size:13px}
-.top{background:var(--card);border-bottom:1px solid var(--line)}
-.top .wrap{display:flex;align-items:baseline;gap:10px;padding-top:14px;padding-bottom:14px}
-.logo{font-weight:800;font-size:20px;color:var(--brand);letter-spacing:-.02em}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
 .btn{background:var(--brand);color:#fff;border:1.5px solid var(--brand);border-radius:10px;padding:12px 18px;font-weight:650}
 .btn:hover{background:var(--brand-2)}
@@ -38,22 +34,13 @@ button{cursor:pointer}
 textarea,select{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;background:var(--card);color:var(--ink)}
 textarea:focus,select:focus{outline:2px solid var(--brand);border-color:transparent}
 
-/* request */
-.cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:16px}
-.cat{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:12px;font-weight:600}
-.cat span{font-size:22px}
-.cat.on{border-color:var(--brand);background:var(--brand-soft);color:var(--brand-2)}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media(max-width:560px){.row2{grid-template-columns:1fr}}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 .chip{background:var(--card);border:1.5px solid var(--line);border-radius:99px;padding:8px 12px;font-size:14px}
 .chip.on{border-color:var(--brand);background:var(--brand-soft);color:var(--brand-2);font-weight:600}
-.fine{font-size:13px;color:var(--muted);text-align:center;margin-top:12px}
 
 /* shared bits */
-.reqbar{background:var(--card);border-bottom:1px solid var(--line)}
-.reqbar .wrap{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:10px;padding-bottom:10px;font-size:14px}
-.av{border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;flex:none;background:var(--c)}
+.av{border-radius:50%;flex:none;background:var(--c);object-fit:cover;display:block}
+.av.stack{margin-left:-10px;border:3px solid #fff}
 .stars{color:var(--star);font-weight:700}
 .badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .b{font-size:12px;padding:3px 9px;border-radius:99px;font-weight:600;white-space:nowrap}
@@ -61,10 +48,27 @@ textarea:focus,select:focus{outline:2px solid var(--brand);border-color:transpar
 .b.pend{background:var(--pend-soft);color:var(--pend)}
 .near{font-size:12px;font-weight:600;color:var(--brand)}
 .far{font-size:12px;color:var(--muted)}
-.phs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.ph{aspect-ratio:4/3;border-radius:10px;background:linear-gradient(135deg,hsl(var(--h) 45% 80%),hsl(var(--h) 38% 58%));display:flex;flex-direction:column;justify-content:space-between;padding:8px}
-.ph span{font-size:28px}
-.ph small{font-size:11px;font-weight:600;background:rgba(255,255,255,.8);border-radius:6px;padding:2px 6px;align-self:flex-start}
+.phs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media(max-width:520px){.phs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.ph{display:grid;gap:6px;align-content:start;border:0;padding:0;background:none;text-align:left;color:inherit;cursor:zoom-in;min-width:0}
+.ph img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:8px;display:block;background:#f3f2f1}
+.ph:hover img{filter:brightness(.9)}
+.ph:focus-visible{outline:2px solid var(--brand);outline-offset:3px;border-radius:8px}
+.ph b{font-size:13px;line-height:1.3}
+.ph small{font-size:12px;color:var(--muted);line-height:1.35}
+.lb{position:fixed;inset:0;z-index:30;background:#0c0e10;color:#fff;display:grid;grid-template-rows:auto minmax(0,1fr) auto}
+.lb-top{display:flex;justify-content:space-between;align-items:center;padding:10px 12px 10px 18px;font-size:14px;color:#ccc}
+.lb figure{margin:0;padding:0 60px;display:grid;place-items:center;min-height:0}
+.lb figure img{max-width:100%;max-height:calc(100vh - 170px);object-fit:contain;border-radius:6px}
+.lb button{background:rgba(40,44,48,.7);color:#fff;border:0;border-radius:50%;width:44px;height:44px;font-size:20px;flex:none}
+.lb button:hover{background:rgba(70,76,82,.9)}
+.lb .nav{position:absolute;top:50%;transform:translateY(-50%)}
+.lb .prev{left:8px} .lb .next{right:8px}
+.lb-cap{padding:14px 18px 20px;text-align:center;font-size:14px;line-height:1.5}
+.lb-cap b{font-size:16px}
+.lb-cap .paid{color:#8fd6a8;font-weight:600}
+.lb-cr{font-size:11px;color:#8a8a8a;margin-top:6px} .lb-cr a{color:inherit}
+@media(max-width:620px){.lb figure{padding:0 8px}}
 .rev{border-top:1px solid var(--line);padding:12px 0}
 .rev:first-child{border-top:0;padding-top:0}
 .rev .h{display:flex;justify-content:space-between;gap:8px;font-size:13px}
@@ -78,56 +82,7 @@ textarea:focus,select:focus{outline:2px solid var(--brand);border-color:transpar
 .ic.pend{background:var(--pend-soft);color:var(--pend)}
 .ic.info{background:#eeebe4;color:var(--muted)}
 
-/* A */
-.list{display:grid;gap:10px}
-.cardA{display:flex;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;cursor:pointer}
-.cardA:hover{border-color:var(--brand);box-shadow:0 4px 16px rgba(14,107,87,.08)}
-.cardA .grow{flex:1;min-width:0}
-.cardA .nm{font-weight:700;font-size:16px}
-.cardA .side{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex:none}
-.price{font-weight:700}
-@media(max-width:620px){.cardA{flex-wrap:wrap}.cardA .side{width:100%;flex-direction:row;flex-wrap:wrap;justify-content:space-between;align-items:center;text-align:left}}
-.pgrid{display:grid;grid-template-columns:360px 1fr;gap:16px;align-items:start}
-.pgrid>div{display:grid;gap:16px}
-@media(max-width:820px){.pgrid{grid-template-columns:1fr}}
-.hero{display:grid;gap:10px}
-.hero .who{display:flex;gap:14px;align-items:center}
-.hero .who b{font-size:20px;display:block}
-.cta{display:grid;gap:8px}
-
-/* B */
-.cmp{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:var(--radius)}
-.cmp table{border-collapse:separate;border-spacing:0;width:100%}
-.cmp th,.cmp td{padding:11px 12px;border-bottom:1px solid var(--line);text-align:center;min-width:170px;vertical-align:middle;font-size:14px}
-.cmp th:first-child,.cmp td:first-child{position:sticky;left:0;background:#faf8f3;text-align:left;min-width:140px;font-weight:600;font-size:13px;z-index:1;border-right:1px solid var(--line)}
-.cmp thead th{vertical-align:top}
-.cmp thead .av{margin:0 auto 6px}
-.cmp td.best{background:var(--brand-soft);font-weight:700}
-.cmp td.best::after{content:"mejor";display:block;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--brand)}
-.cmp .quote{font-size:12px;color:var(--muted);font-style:italic;text-align:left}
-.cmp .acts{display:grid;gap:6px}
 .scrim{position:fixed;inset:0;background:rgba(20,28,24,.45);z-index:20}
-.drawer{position:fixed;top:0;right:0;bottom:0;width:min(460px,100%);background:var(--bg);z-index:21;overflow:auto;padding:16px 16px 130px;box-shadow:-10px 0 30px rgba(0,0,0,.15);display:grid;gap:14px;align-content:start}
-
-/* C */
-.prog{display:flex;justify-content:space-between;align-items:center;margin:16px 0 10px;font-size:14px}
-.dots{display:flex;gap:5px}
-.dots i{width:8px;height:8px;border-radius:50%;background:var(--line)}
-.dots i.on{background:var(--brand)}
-.cC{display:grid;gap:18px}
-.cC .who{text-align:center;display:grid;justify-items:center;gap:4px}
-.cC .who b{font-size:22px}
-.level{border-radius:12px;padding:12px 14px;display:grid;gap:6px}
-.level.hi{background:var(--brand-soft)} .level.mid{background:#eef3e6} .level.lo{background:var(--pend-soft)}
-.meter{height:8px;background:rgba(0,0,0,.08);border-radius:99px;overflow:hidden}
-.meter i{display:block;height:100%;background:var(--brand);border-radius:99px}
-.level.lo .meter i{background:var(--pend)}
-.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
-.facts div{background:#faf8f3;border-radius:10px;padding:10px 4px}
-.facts b{display:block;font-size:20px}
-details summary{cursor:pointer;font-weight:650;color:var(--brand)}
-details[open] summary{margin-bottom:12px}
-.decide{position:sticky;bottom:78px;display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;background:var(--bg);padding:8px 0}
 
 /* hired */
 .done{display:grid;gap:12px;margin-top:20px}
@@ -213,20 +168,10 @@ body:has(.vD){background:#fff}
 .d-mhead button{border:0;background:none;font-size:20px;color:var(--muted)}
 .d-in{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;font:inherit}
 .d-in:focus{outline:2px solid var(--brand);border-color:transparent}
-
-/* prototype switcher — hidden in the MVP */
-#pbar{display:none!important}
-body{padding-bottom:24px}
-#pbar{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:50;background:#111;color:#fff;border-radius:999px;display:flex;align-items:center;gap:8px;padding:6px;box-shadow:0 8px 28px rgba(0,0,0,.35);outline:2px dashed #ffcf33;outline-offset:2px;font:13px/1.2 system-ui,sans-serif;max-width:calc(100% - 24px)}
-#pbar button{width:34px;height:34px;border-radius:50%;border:0;background:#2b2b2b;color:#fff;font-size:15px;flex:none}
-#pbar button:hover{background:#444}
-#pbar .lab{padding:0 4px;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#pbar .lab small{display:block;color:#aaa;font-size:11px}
 </style>
 </head>
 <body>
 <div id="app"></div>
-<div id="pbar"></div>
 <script>
 const CATS=[
   {id:'plomeria',name:'Plomería',icon:'🚰'},
@@ -241,77 +186,75 @@ const WHEN=['Hoy','Mañana','Esta semana','Sin prisa'];
 const W=[
  {id:1,name:'Carlos Méndez',oficio:'Plomero',cats:['plomeria'],zonas:['Col. Palmira','Lomas del Guijarro','Col. Tepeyac'],rating:4.9,reviews:87,jobs:132,years:12,since:2023,idVerified:true,bg:'ok',bgDate:'ago 2026',certs:['Instalaciones sanitarias – INFOP'],response:'30 min',respMin:30,price:[450,1200],color:'#2f6f9f',
   bio:'Arreglo fugas, inodoros, calentadores y tuberías. Llego con mis herramientas y dejo todo limpio.',
-  photos:[['🚽','Cambio de inodoro'],['🚿','Ducha nueva'],['🔧','Fuga bajo lavatrastos']],
+  photos:[['1-1','Cambio de inodoro','Col. Palmira','sep 2026',1100],['1-2','Tubería de lavatrastos','Col. Tepeyac','ago 2026',650],['1-3','Llave de paso nueva','Lomas del Guijarro','jul 2026',500]],
   revs:[{who:'María José R.',zona:'Col. Palmira',date:'hace 2 semanas',stars:5,text:'Llegó a la hora, me explicó qué tenía el inodoro antes de cobrar y dejó todo limpio. Me sentí segura con él en casa.'},
         {who:'Roberto G.',zona:'Col. Tepeyac',date:'hace 1 mes',stars:5,text:'Resolvió una fuga que otro plomero no pudo. Cobró lo que dijo que iba a costar.'}]},
  {id:2,name:'Rosa Mejía',oficio:'Plomera',cats:['plomeria'],zonas:['Col. Miraflores','Col. Florencia Norte','Col. Kennedy'],rating:4.8,reviews:41,jobs:58,years:8,since:2024,idVerified:true,bg:'ok',bgDate:'jun 2026',certs:['Fontanería residencial – INFOP'],response:'1 h',respMin:60,price:[400,1000],color:'#9a4f8a',
   bio:'Plomería general y calentadores. Muchas clientas me buscan porque se sienten más cómodas con una mujer en casa.',
-  photos:[['🛁','Grifería de baño'],['🔥','Calentador instalado'],['🚰','Tubería de cocina']],
+  photos:[['2-1','Lavamanos y grifería','Col. Florencia Norte','oct 2026',900],['2-2','Calentador solar','Col. Miraflores','ago 2026',1000],['2-3','Lavamanos de azulejo','Col. Kennedy','jun 2026',750]],
   revs:[{who:'Lucía M.',zona:'Col. Florencia Norte',date:'hace 5 días',stars:5,text:'Muy profesional y ordenada. Me mandó fotos del avance mientras yo estaba en el trabajo.'},
         {who:'Jorge A.',zona:'Col. Miraflores',date:'hace 3 semanas',stars:4,text:'Buen trabajo, llegó 20 minutos tarde pero avisó por WhatsApp.'}]},
  {id:3,name:'Javier López',oficio:'Plomero',cats:['plomeria'],zonas:['Col. Hato de Enmedio','Col. Kennedy','Col. Palmira'],rating:4.3,reviews:6,jobs:7,years:3,since:2026,idVerified:true,bg:'pending',bgDate:'',certs:[],response:'3 h',respMin:180,price:[300,800],color:'#5e7d3a',
   bio:'Nuevo en Trabajitos. Trabajos pequeños de plomería a buen precio.',
-  photos:[['🔧','Cambio de llave'],['🚽','Destape']],
+  photos:[['3-1','Cambio de llave','Col. Kennedy','oct 2026',300],['3-2','Reparación de tubería','Col. Hato de Enmedio','sep 2026',800]],
   revs:[{who:'Andrea P.',zona:'Col. Hato de Enmedio',date:'hace 1 semana',stars:5,text:'Barato y rápido para un destape.'},
         {who:'Luis C.',zona:'Col. Kennedy',date:'hace 2 semanas',stars:3,text:'Hizo el trabajo pero tuvo que regresar porque le faltó una pieza.'}]},
  {id:4,name:'Ana Lucía Pérez',oficio:'Electricista',cats:['electricidad'],zonas:['Col. Palmira','Lomas del Guijarro','Col. Tepeyac'],rating:5.0,reviews:63,jobs:90,years:10,since:2023,idVerified:true,bg:'ok',bgDate:'jul 2026',certs:['Electricista certificada – INFOP','Instalaciones residenciales'],response:'45 min',respMin:45,price:[600,1800],color:'#c06a1b',
   bio:'Cortos, tableros, tomacorrientes, lámparas e instalaciones nuevas. Trabajo con normas de seguridad.',
-  photos:[['⚡','Tablero nuevo'],['💡','Lámparas de sala'],['🔌','Tomas 220V']],
+  photos:[['4-1','Tablero nuevo','Lomas del Guijarro','oct 2026',1800],['4-2','Lámpara de sala','Col. Palmira','sep 2026',600],['4-3','Cableado de apartamento','Col. Tepeyac','jul 2026',1500]],
   revs:[{who:'Fernando L.',zona:'Lomas del Guijarro',date:'hace 4 días',stars:5,text:'Encontró el corto en 20 minutos. Me explicó todo y me dio recomendaciones de seguridad.'},
         {who:'Claudia S.',zona:'Col. Palmira',date:'hace 1 mes',stars:5,text:'Súper confiable, ya la contraté tres veces.'}]},
  {id:5,name:'Mario Zelaya',oficio:'Electricista',cats:['electricidad'],zonas:['Col. Kennedy','Col. Miraflores','Col. Florencia Norte'],rating:4.7,reviews:112,jobs:205,years:18,since:2022,idVerified:true,bg:'ok',bgDate:'may 2026',certs:['Técnico electricista – INFOP'],response:'2 h',respMin:120,price:[500,1500],color:'#3a5a8c',
   bio:'18 años de experiencia en casas y locales comerciales.',
-  photos:[['🔌','Cableado de local'],['💡','Iluminación exterior'],['⚡','Acometida']],
+  photos:[['5-1','Instalación en local','Col. Kennedy','sep 2026',1500],['5-2','Iluminación exterior','Col. Florencia Norte','ago 2026',900],['5-3','Cableado estructurado','Col. Miraflores','may 2026',1400]],
   revs:[{who:'Sandra V.',zona:'Col. Florencia Norte',date:'hace 2 semanas',stars:5,text:'Sabe muchísimo. Cobró justo.'},
         {who:'Pablo R.',zona:'Col. Kennedy',date:'hace 2 meses',stars:4,text:'Buen trabajo, solo que tardó en confirmar la cita.'}]},
  {id:6,name:'Diego Ramírez',oficio:'Electricista',cats:['electricidad'],zonas:['Col. Hato de Enmedio','Col. Miraflores','Col. Palmira'],rating:4.5,reviews:12,jobs:15,years:4,since:2025,idVerified:true,bg:'ok',bgDate:'mar 2026',certs:[],response:'1 h',respMin:60,price:[450,1200],color:'#7a3b3b',
   bio:'Instalaciones sencillas y reparaciones rápidas.',
-  photos:[['💡','Cambio de lámparas'],['🔌','Tomacorrientes']],
+  photos:[['6-1','Lámpara de entrada','Col. Hato de Enmedio','sep 2026',450],['6-2','Lámpara de cuarto','Col. Miraflores','jul 2026',500]],
   revs:[{who:'Karla D.',zona:'Col. Hato de Enmedio',date:'hace 3 semanas',stars:5,text:'Amable y puntual.'},
         {who:'Esteban M.',zona:'Col. Palmira',date:'hace 1 mes',stars:4,text:'Bien, aunque no traía todas las piezas.'}]},
  {id:7,name:'Edgar Banegas',oficio:'Soldador',cats:['soldadura'],zonas:['Col. Florencia Norte','Col. Miraflores','Col. Kennedy'],rating:4.8,reviews:54,jobs:76,years:15,since:2023,idVerified:true,bg:'ok',bgDate:'jun 2026',certs:['Soldadura MIG/TIG – INFOP'],response:'2 h',respMin:120,price:[800,2800],color:'#4f4f4f',
   bio:'Portones, balcones, estructuras y reparaciones de metal.',
-  photos:[['🚪','Portón corredizo'],['🪜','Escalera metálica'],['🔥','Reparación de balcón']],
+  photos:[['7-1','Portón de hierro','Col. Florencia Norte','oct 2026',2800],['7-2','Soldadura de estructura','Col. Kennedy','ago 2026',1200],['7-3','Baranda de balcón','Col. Miraflores','jun 2026',2200]],
   revs:[{who:'Héctor B.',zona:'Col. Florencia Norte',date:'hace 1 semana',stars:5,text:'El portón quedó perfecto y lo terminó en el día prometido.'},
         {who:'Gabriela T.',zona:'Col. Miraflores',date:'hace 1 mes',stars:5,text:'Muy cuidadoso, protegió el piso y las paredes.'}]},
  {id:8,name:'Luis Fernando Ordóñez',oficio:'Soldador',cats:['soldadura','construccion'],zonas:['Col. Hato de Enmedio','Col. Kennedy','Col. Palmira'],rating:4.6,reviews:19,jobs:25,years:7,since:2025,idVerified:true,bg:'pending',bgDate:'',certs:[],response:'4 h',respMin:240,price:[600,2000],color:'#6b5a2f',
   bio:'Herrería y pequeñas estructuras.',
-  photos:[['🪟','Balcones'],['🚪','Puerta de metal']],
+  photos:[['8-1','Estructura metálica','Col. Hato de Enmedio','sep 2026',1600],['8-2','Puerta de hierro','Col. Kennedy','jul 2026',2000]],
   revs:[{who:'Rodrigo F.',zona:'Col. Hato de Enmedio',date:'hace 2 semanas',stars:5,text:'Buen precio para los balcones.'},
         {who:'Mónica E.',zona:'Col. Kennedy',date:'hace 2 meses',stars:4,text:'Buen trabajo, tardó en responder.'}]},
  {id:9,name:'Óscar Barrios',oficio:'Maestro de obra',cats:['construccion'],zonas:['Lomas del Guijarro','Col. Tepeyac','Col. Palmira'],rating:4.9,reviews:38,jobs:44,years:20,since:2023,idVerified:true,bg:'ok',bgDate:'abr 2026',certs:['Maestro de obras – INFOP'],response:'3 h',respMin:180,price:[1200,15000],color:'#8a6a1f',
   bio:'Ampliaciones, muros, pisos y remodelaciones. Trabajo con mi equipo de 2 ayudantes (también verificados).',
-  photos:[['🧱','Muro perimetral'],['🏠','Ampliación de cuarto'],['🪵','Piso nuevo']],
+  photos:[['9-1','Segundo nivel','Col. Tepeyac','sep 2026',15000],['9-2','Ampliación de cuarto','Lomas del Guijarro','jun 2026',12000],['9-3','Piso nuevo','Col. Palmira','abr 2026',4500]],
   revs:[{who:'Ricardo O.',zona:'Col. Tepeyac',date:'hace 3 semanas',stars:5,text:'Me dio un presupuesto por escrito y lo respetó. Sus ayudantes también muy respetuosos.'},
         {who:'Elena W.',zona:'Col. Palmira',date:'hace 2 meses',stars:5,text:'Remodelaron el baño en una semana.'}]},
  {id:10,name:'Wendy Chávez',oficio:'Albañilería y acabados',cats:['construccion'],zonas:['Col. Florencia Norte','Col. Miraflores'],rating:4.7,reviews:27,jobs:33,years:9,since:2024,idVerified:true,bg:'ok',bgDate:'feb 2026',certs:[],response:'1 h',respMin:60,price:[900,9000],color:'#2f7f73',
   bio:'Repellos, pintura, azulejo y acabados finos.',
-  photos:[['🎨','Pintura de fachada'],['🧱','Azulejo de cocina']],
+  photos:[['10-1','Repello de fachada','Col. Florencia Norte','sep 2026',6500],['10-2','Azulejo de cocina','Col. Miraflores','jul 2026',3800]],
   revs:[{who:'Daniela H.',zona:'Col. Florencia Norte',date:'hace 1 semana',stars:5,text:'Muy detallista con los acabados.'},
         {who:'Marco P.',zona:'Col. Miraflores',date:'hace 1 mes',stars:4,text:'Buen trabajo, se extendió un día más.'}]},
  {id:11,name:'Kevin Morales',oficio:'Albañil',cats:['construccion'],zonas:['Col. Hato de Enmedio','Col. Kennedy'],rating:4.2,reviews:4,jobs:5,years:2,since:2026,idVerified:false,bg:'pending',bgDate:'',certs:[],response:'5 h',respMin:300,price:[800,6000],color:'#7d6b8f',
   bio:'Recién registrado. Trabajos de albañilería en general.',
-  photos:[['🧱','Muro de block']],
+  photos:[['11-1','Muro de block','Col. Hato de Enmedio','sep 2026',4200]],
   revs:[{who:'Julio N.',zona:'Col. Hato de Enmedio',date:'hace 3 semanas',stars:4,text:'Trabajo bien hecho, aunque no tenía todas las herramientas.'}]},
  {id:12,name:'Pedro Matute',oficio:'Todero / mantenimiento',cats:['otro','plomeria','electricidad'],zonas:['Col. Palmira','Lomas del Guijarro','Col. Tepeyac','Col. Miraflores','Col. Florencia Norte'],rating:4.8,reviews:95,jobs:160,years:11,since:2022,idVerified:true,bg:'ok',bgDate:'ago 2026',certs:[],response:'20 min',respMin:20,price:[300,900],color:'#1f6f8b',
   bio:'Cuelgo cuadros, armo muebles, cambio chapas y hago reparaciones pequeñas de todo tipo.',
-  photos:[['🪑','Armado de muebles'],['🖼️','Repisas y cuadros'],['🔐','Cambio de chapa']],
+  photos:[['12-1','Armado de escritorio','Col. Palmira','oct 2026',400],['12-2','Repisas de pared','Lomas del Guijarro','sep 2026',600],['12-3','Cambio de chapa','Col. Tepeyac','ago 2026',350]],
   revs:[{who:'Isabel C.',zona:'Lomas del Guijarro',date:'hace 3 días',stars:5,text:'Le dejé una lista de 8 cosas y las hizo todas en una mañana.'},
         {who:'Tomás Q.',zona:'Col. Palmira',date:'hace 3 semanas',stars:5,text:'Ya es nuestro señor de confianza para todo.'}]},
 ];
+// Photo credits (CC licences, via Openverse): file -> [author, licence, source page]
+const CREDITS={"1-1":["jmerelo","CC BY-SA 2.0","https://www.flickr.com/photos/48600078653@N01/42602337915"],"1-2":["jhderojas","CC BY 2.0","https://www.flickr.com/photos/89995520@N00/1789578974"],"1-3":["imageneslibres","CC0","https://www.flickr.com/photos/138716009@N05/26157091006"],"2-1":["pena2","CC BY 2.0","https://www.flickr.com/photos/49486035@N00/4436247166"],"2-2":["hdaniel","CC BY-SA 2.0","https://www.flickr.com/photos/43779660@N00/3450454490"],"2-3":["Avodrocc","CC BY 2.0","https://www.flickr.com/photos/22086776@N00/336328704"],"3-1":["imageneslibres","CC0","https://www.flickr.com/photos/138716009@N05/25580072833"],"3-2":["Alcaldía de Joseph Cueva 2009-2014","CC BY-SA 2.0","https://www.flickr.com/photos/45783535@N05/5280524070"],"4-1":["Labanderadeadiosayer","CC BY-SA 4.0","https://commons.wikimedia.org/w/index.php?curid=113469200"],"4-2":["manuelfloresv","CC BY 2.0","https://www.flickr.com/photos/7362086@N02/447366508"],"4-3":["ccencantado","CC BY-SA 2.0","https://www.flickr.com/photos/74416459@N03/8411725290"],"5-1":["Galería de fotografías del Ministerio de Defensa","CC BY 2.0","https://www.flickr.com/photos/92793865@N07/32220388243"],"5-2":["Christian Frausto Bernal","CC BY-SA 2.0","https://www.flickr.com/photos/34608250@N00/286690833"],"5-3":["Javier Aroche","CC BY 2.0","https://www.flickr.com/photos/31479545@N00/3516376059"],"6-1":["alfaneque","CC BY 2.0","https://www.flickr.com/photos/76623287@N00/2287862609"],"6-2":["Mario A. P.","CC BY-SA 2.0","https://www.flickr.com/photos/99058495@N00/59180690"],"7-1":["ell brown","CC BY 2.0","https://www.flickr.com/photos/39415781@N06/3927397870"],"7-2":["chimpwithcan","CC BY 2.0","https://www.flickr.com/photos/188454520@N02/49932238137"],"7-3":["Spencer Means","CC BY-SA 2.0","https://www.flickr.com/photos/28643687@N08/14211790887"],"8-1":["whiteafrican","CC BY 2.0","https://www.flickr.com/photos/18288598@N00/840735183"],"8-2":["Spencer Means","CC BY-SA 2.0","https://www.flickr.com/photos/28643687@N08/28090086064"],"9-1":["Rafael Robles L.","CC BY 2.0","https://www.flickr.com/photos/15486718@N00/6058676893"],"9-2":["Caelesis","CC BY-SA 4.0","https://commons.wikimedia.org/w/index.php?curid=5016719"],"9-3":["Fernanda Meraz","CC BY-SA 2.0","https://www.flickr.com/photos/70984264@N08/6416616451"],"10-1":["ruurmo","CC BY-SA 2.0","https://www.flickr.com/photos/81752595@N00/157472315"],"10-2":["bartoszjanusz","CC0","https://www.flickr.com/photos/68782296@N04/6254897113"],"11-1":["gatordawg99","CC BY 2.0","https://www.flickr.com/photos/10311239@N04/3394432245"],"12-1":["forrest.wheatey","CC BY-SA 2.0","https://www.flickr.com/photos/144459964@N06/30611440670"],"12-2":["Rocky Mountain Feline Rescue","CC BY 2.0","https://www.flickr.com/photos/77562960@N00/2535096446"],"12-3":["A.Davey","CC BY 2.0","https://www.flickr.com/photos/40595948@N00/3644036603"]};
 
-const STEP_ES={request:'solicitud',results:'resultados',profile:'perfil',hired:'contratado'};
-const VARIANTS=[['D','Estilo Indeed']];
 const state={
-  variant:'D',
-  f:{verified:false,top:false,near:false,sort:'rel'}, modal:null, saved:new Set(),
+  f:{verified:false,top:false,near:false,sort:'rel'}, modal:null, lb:null, saved:new Set(),
   step:'request', // request | results | profile | hired
   req:{cat:'plomeria',what:'Plomero',desc:'El inodoro no deja de correr agua y el tanque gotea.',zona:'Col. Palmira',when:'Hoy',addr:''},
-  sel:null, idx:0,
+  sel:null,
 };
-if(!VARIANTS.some(v=>v[0]===state.variant)) state.variant='D';
 
-const $app=document.getElementById('app'), $bar=document.getElementById('pbar');
+const $app=document.getElementById('app');
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const q=n=>'L'+n.toLocaleString('en-US');
 const byId=id=>W.find(w=>w.id===id);
@@ -323,13 +266,26 @@ function matches(){
   const l=W.filter(w=>state.req.cat==='otro'||w.cats.includes(state.req.cat));
   return l.sort((a,b)=>(isNear(b)-isNear(a))||(score(b)-score(a)));
 }
-const avatar=(w,s)=>`<div class="av" style="--c:${w.color};width:${s}px;height:${s}px;font-size:${Math.round(s*.36)}px">${w.name.split(' ').slice(0,2).map(p=>p[0]).join('')}</div>`;
+// Faces are AI-generated (thispersondoesnotexist.com): no real person is tied to fake reviews.
+const avatar=(w,s,cls='')=>`<img class="av ${cls}" src="/img/caras/${w.id}.jpg" alt="" width="${s}" height="${s}" style="--c:${w.color}">`;
 const nearTag=w=>isNear(w)?`<span class="near">📍 Atiende ${esc(state.req.zona)}</span>`:`<span class="far">Atiende: ${w.zonas.slice(0,2).join(', ')}</span>`;
 const badges=w=>`<div class="badges">
   <span class="b ${w.idVerified?'ok':'pend'}">${w.idVerified?'✓ Identidad verificada':'⏳ Identidad sin verificar'}</span>
   <span class="b ${w.bg==='ok'?'ok':'pend'}">${w.bg==='ok'?'✓ Sin antecedentes':'⏳ Antecedentes en revisión'}</span>
   ${w.certs.length?'<span class="b ok">✓ Certificado</span>':''}</div>`;
-const photos=w=>`<div class="phs">${w.photos.map(([e,t],i)=>`<div class="ph" style="--h:${(w.id*47+i*60)%360}"><span>${e}</span><small>${t}</small></div>`).join('')}</div>`;
+// Past work: [file, title, colonia, date, price paid]. Images in /img/trabajos/<file>-s.jpg (thumb) and <file>.jpg (full).
+const phMeta=([,,z,d,p])=>`📍 ${z} · ${d} · ${q(p)}`;
+const photos=w=>`<div class="phs">${w.photos.map((ph,i)=>`<button class="ph" data-act="ph" data-id="${w.id}" data-i="${i}" aria-label="Ver foto: ${ph[1]}">
+  <img src="/img/trabajos/${ph[0]}-s.jpg" alt="${ph[1]} en ${ph[2]}" loading="lazy" width="480" height="360"><b>${ph[1]}</b><small>${phMeta(ph)}</small></button>`).join('')}</div>`;
+function lightbox(){
+  const w=byId(state.lb.id), n=w.photos.length, i=state.lb.i, ph=w.photos[i], cr=CREDITS[ph[0]];
+  const nav=n>1?`<button class="nav prev" data-act="lbNav" data-id="-1" aria-label="Foto anterior">‹</button><button class="nav next" data-act="lbNav" data-id="1" aria-label="Foto siguiente">›</button>`:'';
+  return `<div class="lb" role="dialog" aria-modal="true" aria-label="Trabajos de ${w.name}">
+  <div class="lb-top"><span>Trabajos de ${w.name} · ${i+1} de ${n}</span><button data-act="lbClose" aria-label="Cerrar">✕</button></div>
+  <figure><img src="/img/trabajos/${ph[0]}.jpg" alt="${ph[1]} en ${ph[2]}"></figure>${nav}
+  <div class="lb-cap"><b>${ph[1]}</b><br>${phMeta(ph)} · <span class="paid">✓ Pagado en Trabajitos</span>
+    ${cr?`<div class="lb-cr">Foto ilustrativa: <a href="${cr[2]}" target="_blank" rel="noopener">${esc(cr[0])}</a> · ${cr[1]}</div>`:''}</div></div>`;
+}
 function reviews(w,mineFirst){
   let rs=[...w.revs];
   if(mineFirst) rs.sort((a,b)=>(b.zona===state.req.zona)-(a.zona===state.req.zona));
@@ -349,42 +305,10 @@ function signals(w){
 }
 const icon={ok:'✓',pend:'⏳',info:'•'};
 const checklist=w=>`<ul class="checks">${signals(w).map(s=>`<li><span class="ic ${s.st}">${icon[s.st]}</span><div><b>${s.label}</b><div class="sm muted">${s.detail}</div></div></li>`).join('')}</ul>`;
-function trustLevel(w){
-  const pct=Math.round((w.idVerified?25:0)+(w.bg==='ok'?25:0)+Math.min(w.reviews,30)/30*25+(w.certs.length?10:0)+Math.min(w.jobs,50)/50*15);
-  const why=[];
-  if(!w.idVerified) why.push('identidad sin verificar');
-  if(w.bg!=='ok') why.push('antecedentes en revisión');
-  if(w.reviews<10) why.push('pocas reseñas');
-  if(pct>=80) return {k:'hi',label:'Alta',pct,why:'Verificado, sin antecedentes y con muchas reseñas de clientes reales.'};
-  if(pct>=50) return {k:'mid',label:'Media',pct,why:'Ojo: '+why.join(', ')+'.'};
-  return {k:'lo',label:'En construcción',pct,why:'Ojo: '+why.join(', ')+'.'};
-}
-
-/* ---------- shared screens ---------- */
-const header=()=>`<header class="top"><div class="wrap"><span class="logo">trabajitos</span><span class="tag">Gente de confianza para tu casa</span></div></header>`;
-const reqSummary=()=>`<div class="reqbar"><div class="wrap"><div><b>${catName()}</b> · ${esc(state.req.zona)} · ${state.req.when}<div class="muted sm">“${esc(state.req.desc)}”</div></div><button class="link" data-act="edit">Editar</button></div></div>`;
-
-function viewRequest(){
-  const r=state.req;
-  return `<main class="wrap narrow">
-  <h1>¿Qué trabajito necesitas?</h1>
-  <p class="muted">Cuéntanos el problema y te mostramos profesionales verificados cerca de ti.</p>
-  <div class="cats">${CATS.map(c=>`<button class="cat ${r.cat===c.id?'on':''}" data-act="cat" data-id="${c.id}"><span>${c.icon}</span>${c.name}</button>`).join('')}</div>
-  <label class="lbl" for="desc">Describe el problema</label>
-  <textarea id="desc" rows="3" placeholder="Ej: el inodoro no deja de correr agua">${esc(r.desc)}</textarea>
-  <div class="row2">
-    <div><label class="lbl" for="zona">¿Dónde?</label><select id="zona">${ZONAS.map(z=>`<option ${z===r.zona?'selected':''}>${z}</option>`).join('')}</select></div>
-    <div><label class="lbl">¿Cuándo?</label><div class="chips">${WHEN.map(w=>`<button class="chip ${r.when===w?'on':''}" data-act="when" data-id="${w}">${w}</button>`).join('')}</div></div>
-  </div>
-  <button class="btn big" data-act="search">Buscar profesionales</button>
-  <p class="fine">🔒 Revisamos identidad y antecedentes. Siempre te mostramos qué está confirmado y qué no.</p>
-  </main>`;
-}
-
 function viewHired(){
   const w=byId(state.sel), code=String(1000+(w.id*7919)%9000);
   return `<main class="wrap narrow"><div class="card done">
-   <div class="okbig">✓</div>
+   <div style="display:flex;align-items:center"><div class="okbig">✓</div>${avatar(w,64,'stack')}</div>
    <h1 style="margin:0">Solicitud enviada a ${w.name}</h1>
    <p class="muted" style="margin:0">${catName()} · ${esc(state.req.zona)} · ${state.req.when} · ${q(w.price[0])}–${q(w.price[1])} aprox.</p>
    <h3 style="margin-top:8px">Qué pasa ahora</h3>
@@ -401,110 +325,7 @@ function viewHired(){
   </div></main>`;
 }
 
-/* ---------- Variant A: cards list → full profile with trust panel ---------- */
-const cardA=w=>`<article class="cardA" data-act="open" data-id="${w.id}">
-  ${avatar(w,56)}
-  <div class="grow">
-    <div class="nm">${w.name}</div>
-    <div class="muted sm">${w.oficio} · ${w.years} años de experiencia</div>
-    <div class="sm" style="margin-top:4px"><span class="stars">★ ${w.rating}</span> (${w.reviews} reseñas) · ${w.jobs} trabajos</div>
-    ${badges(w)}
-  </div>
-  <div class="side"><span class="price">${q(w.price[0])}–${q(w.price[1])}</span><span class="muted sm">Responde en ~${w.response}</span>${nearTag(w)}<span class="link">Ver perfil →</span></div>
-</article>`;
-function viewA(){
-  if(state.step==='profile') return profileA(byId(state.sel));
-  const l=matches();
-  return `${reqSummary()}<main class="wrap"><h2>${l.length} profesionales para tu trabajito</h2><div class="list">${l.map(cardA).join('')}</div></main>`;
-}
-function profileA(w){
-  return `${reqSummary()}<main class="wrap">
-  <button class="link" data-act="back">← Ver más opciones</button>
-  <div class="pgrid">
-    <div>
-      <section class="card hero">
-        <div class="who">${avatar(w,80)}<div><b>${w.name}</b><span class="muted">${w.oficio}</span><div class="sm"><span class="stars">★ ${w.rating}</span> · ${w.reviews} reseñas · ${w.jobs} trabajos</div></div></div>
-        ${nearTag(w)}
-        <p style="margin:0">${w.bio}</p>
-        <div class="cta"><button class="btn" data-act="hire" data-id="${w.id}">Contratar a ${first(w)}</button><button class="btn ghost" data-act="back">Ver más opciones</button></div>
-      </section>
-      <section class="card"><h3>Por qué puedes confiar en ${first(w)}</h3>${checklist(w)}</section>
-    </div>
-    <div>
-      <section class="card"><h3>Trabajos anteriores</h3>${photos(w)}</section>
-      <section class="card"><h3>Reseñas (${w.reviews})</h3>${reviews(w,false)}</section>
-    </div>
-  </div></main>`;
-}
-
-/* ---------- Variant B: side-by-side comparison table, profile in a drawer ---------- */
-function viewB(){
-  const l=matches();
-  const ok=(v,t,f)=>v?`<span class="b ok">✓ ${t}</span>`:`<span class="b pend">⏳ ${f}</span>`;
-  const rows=[
-    ['Identidad',w=>ok(w.idVerified,'Verificada','Sin verificar')],
-    ['Antecedentes',w=>ok(w.bg==='ok','Limpios','En revisión')],
-    ['Calificación',w=>`<span class="stars">★ ${w.rating}</span>`,w=>w.rating,'max'],
-    ['Reseñas',w=>w.reviews,w=>w.reviews,'max'],
-    ['Trabajos completados',w=>w.jobs,w=>w.jobs,'max'],
-    ['Experiencia',w=>w.years+' años',w=>w.years,'max'],
-    ['Certificación',w=>w.certs[0]?`<span class="sm">${w.certs[0]}</span>`:'<span class="muted">—</span>'],
-    ['Atiende tu colonia',w=>isNear(w)?'📍 Sí':'<span class="muted">No</span>'],
-    ['Responde en',w=>'~'+w.response,w=>-w.respMin,'max'],
-    ['Precio típico',w=>`${q(w.price[0])}–${q(w.price[1])}`,w=>-w.price[0],'max'],
-    ['Reseña reciente',w=>`<div class="quote">“${w.revs[0].text.slice(0,80)}${w.revs[0].text.length>80?'…':''}”</div>`],
-  ];
-  const body=rows.map(([label,cell,num])=>{
-    const best=num?Math.max(...l.map(num)):null;
-    return `<tr><td>${label}</td>${l.map(w=>`<td class="${num&&l.length>1&&num(w)===best?'best':''}">${cell(w)}</td>`).join('')}</tr>`;
-  }).join('');
-  const table=`<div class="cmp"><table>
-    <thead><tr><th>${l.length} opciones</th>${l.map(w=>`<th>${avatar(w,48)}<div>${w.name}</div><div class="muted sm" style="font-weight:400">${w.oficio}</div></th>`).join('')}</tr></thead>
-    <tbody>${body}
-    <tr><td></td>${l.map(w=>`<td><div class="acts"><button class="btn sm" data-act="hire" data-id="${w.id}">Contratar</button><button class="btn ghost sm" data-act="open" data-id="${w.id}">Ver perfil</button></div></td>`).join('')}</tr>
-    </tbody></table></div>`;
-  let drawer='';
-  if(state.step==='profile'){
-    const w=byId(state.sel);
-    drawer=`<div class="scrim" data-act="close"></div><aside class="drawer">
-      <button class="link" data-act="close" style="justify-self:start">✕ Seguir comparando</button>
-      <div style="display:flex;gap:12px;align-items:center">${avatar(w,64)}<div><b style="font-size:18px">${w.name}</b><div class="muted">${w.oficio} · <span class="stars">★ ${w.rating}</span> (${w.reviews})</div></div></div>
-      ${badges(w)}
-      <p style="margin:0">${w.bio}</p>
-      <section class="card"><h3>Trabajos anteriores</h3>${photos(w)}</section>
-      <section class="card"><h3>Reseñas</h3>${reviews(w,false)}</section>
-      <section class="card"><h3>Verificaciones</h3>${checklist(w)}</section>
-      <button class="btn" data-act="hire" data-id="${w.id}">Contratar a ${first(w)}</button>
-    </aside>`;
-  }
-  return `${reqSummary()}<main class="wrap"><h2>Compara antes de elegir</h2>${table}</main>${drawer}`;
-}
-
-/* ---------- Variant C: one curated option at a time, hire or see next ---------- */
-function viewC(){
-  const l=matches(), i=state.idx;
-  if(i>=l.length) return `${reqSummary()}<main class="wrap narrow"><div class="card done">
-    <h2 style="margin:0">Ya viste las ${l.length} opciones</h2>
-    <p class="muted" style="margin:0">Puedes volver a revisarlas o cambiar tu solicitud (otra colonia u otro horario puede darte más opciones).</p>
-    <button class="btn" data-act="first">Volver a la primera</button><button class="btn ghost" data-act="edit">Cambiar mi solicitud</button></div></main>`;
-  const w=l[i], lv=trustLevel(w);
-  return `${reqSummary()}<main class="wrap narrow">
-  <div class="prog"><span>Opción <b>${i+1}</b> de ${l.length}${i===0?' · <b style="color:var(--brand)">Mejor coincidencia</b>':''}</span><span class="dots">${l.map((_,j)=>`<i class="${j===i?'on':''}"></i>`).join('')}</span></div>
-  <article class="card cC">
-    <div class="who">${avatar(w,96)}<b>${w.name}</b><span class="muted">${w.oficio}</span>${nearTag(w)}</div>
-    <div class="level ${lv.k}"><b>Nivel de confianza: ${lv.label}</b><div class="meter"><i style="width:${lv.pct}%"></i></div><span class="sm">${lv.why}</span></div>
-    <div class="facts"><div><b><span class="stars">★</span> ${w.rating}</b><span class="sm muted">${w.reviews} reseñas</span></div><div><b>${w.jobs}</b><span class="sm muted">trabajos hechos</span></div><div><b>${w.years}</b><span class="sm muted">años de exp.</span></div></div>
-    <section><h3>Lo que dicen tus vecinos</h3>${reviews(w,true)}</section>
-    <section><h3>Su trabajo</h3>${photos(w)}</section>
-    <p style="margin:0">${w.bio} <span class="muted">· ${q(w.price[0])}–${q(w.price[1])} · responde en ~${w.response}</span></p>
-    <details><summary>Ver verificaciones y detalles</summary>${checklist(w)}</details>
-  </article>
-  <div class="decide"><button class="btn ghost" data-act="next">Ver otra opción →</button><button class="btn" data-act="hire" data-id="${w.id}">Contratar a ${first(w)}</button></div>
-  ${i>0?'<button class="link" data-act="prev">← Opción anterior</button>':''}
-  </main>`;
-}
-
-/* ---------- Variant D: Indeed-style search bar + list left / detail right ---------- */
+/* ---------- Indeed-style search bar + list left / detail right ---------- */
 const CAT_WORDS=[
   ['plomeria',/plom|inodoro|fuga|agua|tuber|grifo|llave|calentador|drenaje|destap/],
   ['electricidad',/electr|luz|corto|enchufe|toma|l[aá]mpara|breaker|tablero/],
@@ -586,54 +407,32 @@ function searchFromD(){state.req.cat=catFromText(state.req.what);state.step='res
 
 /* ---------- render + actions ---------- */
 function render(){
-  if(state.variant==='D') $app.innerHTML=`<div class="vD">${viewD()}</div>`;
-  else{
-    let html;
-    if(state.step==='request') html=viewRequest();
-    else if(state.step==='hired') html=viewHired();
-    else html={A:viewA,B:viewB,C:viewC}[state.variant]();
-    $app.innerHTML=header()+html;
-  }
-  const v=VARIANTS.find(x=>x[0]===state.variant);
-  $bar.innerHTML=`<button data-pv="-1" title="Variante anterior (←)">◀</button>
-    <div class="lab"><b>${v[0]}</b> · ${v[1]}<small>${state.variant!=='D'&&(state.step==='request'||state.step==='hired')?'<span style="color:#ffcf33">pantalla igual en A/B/C</span> · ':''}paso: ${STEP_ES[state.step]} ·${matches().length} resultados${state.sel?' · elegido: '+first(byId(state.sel)):''}</small></div>
-    <button data-pv="1" title="Siguiente variante (→)">▶</button>`;
+  $app.innerHTML=`<div class="vD">${viewD()}${state.lb?lightbox():''}</div>`;
+  if(state.lb) $app.querySelector('[data-act=lbClose]').focus();
 }
-function setVariant(k){
-  state.variant=k;
-  try{const u=new URL(location.href);u.searchParams.set('variant',k);history.replaceState(null,'',u)}catch(e){}
-  render();
-}
-function cycle(d){const i=VARIANTS.findIndex(v=>v[0]===state.variant);setVariant(VARIANTS[(i+d+VARIANTS.length)%VARIANTS.length][0])}
+const lbNav=d=>{const n=byId(state.lb.id).photos.length;state.lb.i=(state.lb.i+d+n)%n};
 
 document.addEventListener('click',e=>{
-  const pv=e.target.closest('[data-pv]'); if(pv){cycle(+pv.dataset.pv);return}
   const el=e.target.closest('[data-act]'); if(!el) return;
-  const act=el.dataset.act, id=el.dataset.id, l=matches();
+  const act=el.dataset.act, id=el.dataset.id;
   let top=true;
   switch(act){
-    case 'cat': state.req.cat=id; top=false; break;
     case 'when': state.req.when=id; top=false; break;
-    case 'search': state.step='results'; state.idx=0; state.sel=null; break;
-    case 'edit': state.step='request'; break;
-    case 'open': state.sel=+id; state.idx=Math.max(0,l.findIndex(w=>w.id===+id)); state.step='profile';
-      top=state.variant==='D'?window.innerWidth<820:state.variant!=='B'; break;
-    case 'close': state.step='results'; top=false; break;
+    case 'open': state.sel=+id; state.step='profile'; top=window.innerWidth<820; break;
     case 'back': state.step=state.step==='hired'?'profile':'results'; break;
-    case 'hire': if(state.variant==='D'){state.modal=+id;top=false;break}
-      state.sel=+id; state.step='hired'; break;
+    case 'hire': state.modal=+id; top=false; break;
     case 'send': state.sel=state.modal; state.modal=null; state.step='hired'; break;
     case 'closeModal': state.modal=null; top=false; break;
+    case 'ph': state.lb={id:+id,i:+el.dataset.i}; top=false; break;
+    case 'lbNav': lbNav(+id); top=false; break;
+    case 'lbClose': state.lb=null; top=false; break;
     case 'searchD': searchFromD(); break;
     case 'pop': state.req.what=id; searchFromD(); break;
     case 'filt': state.f[id]=!state.f[id]; top=false; break;
     case 'clearF': Object.assign(state.f,{verified:false,top:false,near:false}); top=false; break;
     case 'save': state.saved.has(+id)?state.saved.delete(+id):state.saved.add(+id); top=false; break;
-    case 'next': state.idx++; state.sel=null; break;
-    case 'prev': state.idx=Math.max(0,state.idx-1); break;
-    case 'first': state.idx=0; break;
     case 'share': alert('(Prototipo) Se enviaría por WhatsApp: nombre, foto y código de visita del profesional, con la dirección y hora.'); return;
-    case 'restart': state.step='request'; state.sel=null; state.idx=0; break;
+    case 'restart': state.step='request'; state.sel=null; break;
   }
   render(); if(top) window.scrollTo(0,0);
 });
@@ -649,6 +448,10 @@ document.addEventListener('change',e=>{
 document.addEventListener('keydown',e=>{
   const t=e.target;
   if(e.key==='Enter'&&t.id==='what'){searchFromD();render();return}
+  if(state.lb){
+    if(e.key==='Escape') state.lb=null; else if(e.key==='ArrowLeft') lbNav(-1); else if(e.key==='ArrowRight') lbNav(1); else return;
+    render(); return;
+  }
   if(e.key==='Escape'&&state.modal){state.modal=null;render();return}
   if(t.matches('input,textarea,select,[contenteditable]')) return;
 });
