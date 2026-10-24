@@ -1,0 +1,662 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Encuentra plomeros, electricistas, soldadores y albañiles verificados en Tegucigalpa.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛠️</text></svg>">
+<title>Trabajitos · Gente de confianza para tu casa</title>
+<!--
+  Trabajitos MVP (concept): variant D from prototypes/trabajitos-confianza.prototype.html.
+  Fake data, in-memory state, no backend. Tegucigalpa, Honduras (Lempiras, colonias).
+  Variants A/B/C code is still inline; to be removed in the refine pass.
+-->
+<style>
+:root{--bg:#f6f3ec;--card:#fff;--ink:#1c2420;--muted:#65706a;--line:#e3ddd1;--brand:#0e6b57;--brand-2:#0a5544;--brand-soft:#e2f0ea;--pend:#8a5a00;--pend-soft:#fdf1d8;--star:#d99a00;--radius:14px}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:120px}
+h1{font-size:26px;line-height:1.2;margin:18px 0 6px;letter-spacing:-.01em}
+h2{font-size:19px;margin:18px 0 12px}
+h3{font-size:16px;margin:0 0 10px}
+button,select,textarea{font:inherit}
+button{cursor:pointer}
+.wrap{max-width:1040px;margin:0 auto;padding:0 16px}
+.narrow{max-width:640px}
+.muted{color:var(--muted)} .sm{font-size:13px}
+.top{background:var(--card);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:baseline;gap:10px;padding-top:14px;padding-bottom:14px}
+.logo{font-weight:800;font-size:20px;color:var(--brand);letter-spacing:-.02em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+.btn{background:var(--brand);color:#fff;border:1.5px solid var(--brand);border-radius:10px;padding:12px 18px;font-weight:650}
+.btn:hover{background:var(--brand-2)}
+.btn.ghost{background:var(--card);color:var(--brand)}
+.btn.big{width:100%;padding:15px;font-size:16px;margin-top:20px}
+.btn.sm{padding:8px 12px;font-size:13px}
+.link{background:none;border:0;color:var(--brand);font-weight:600;padding:8px 0}
+.lbl{display:block;font-weight:650;margin:18px 0 6px}
+textarea,select{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;background:var(--card);color:var(--ink)}
+textarea:focus,select:focus{outline:2px solid var(--brand);border-color:transparent}
+
+/* request */
+.cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:16px}
+.cat{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:12px;font-weight:600}
+.cat span{font-size:22px}
+.cat.on{border-color:var(--brand);background:var(--brand-soft);color:var(--brand-2)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.row2{grid-template-columns:1fr}}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:var(--card);border:1.5px solid var(--line);border-radius:99px;padding:8px 12px;font-size:14px}
+.chip.on{border-color:var(--brand);background:var(--brand-soft);color:var(--brand-2);font-weight:600}
+.fine{font-size:13px;color:var(--muted);text-align:center;margin-top:12px}
+
+/* shared bits */
+.reqbar{background:var(--card);border-bottom:1px solid var(--line)}
+.reqbar .wrap{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:10px;padding-bottom:10px;font-size:14px}
+.av{border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;flex:none;background:var(--c)}
+.stars{color:var(--star);font-weight:700}
+.badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.b{font-size:12px;padding:3px 9px;border-radius:99px;font-weight:600;white-space:nowrap}
+.b.ok{background:var(--brand-soft);color:var(--brand-2)}
+.b.pend{background:var(--pend-soft);color:var(--pend)}
+.near{font-size:12px;font-weight:600;color:var(--brand)}
+.far{font-size:12px;color:var(--muted)}
+.phs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ph{aspect-ratio:4/3;border-radius:10px;background:linear-gradient(135deg,hsl(var(--h) 45% 80%),hsl(var(--h) 38% 58%));display:flex;flex-direction:column;justify-content:space-between;padding:8px}
+.ph span{font-size:28px}
+.ph small{font-size:11px;font-weight:600;background:rgba(255,255,255,.8);border-radius:6px;padding:2px 6px;align-self:flex-start}
+.rev{border-top:1px solid var(--line);padding:12px 0}
+.rev:first-child{border-top:0;padding-top:0}
+.rev .h{display:flex;justify-content:space-between;gap:8px;font-size:13px}
+.rev p{margin:6px 0 4px}
+.rev .paid{font-size:12px;color:var(--brand);font-weight:600}
+.rev.mine{background:var(--brand-soft);border-radius:10px;padding:12px;border:0;margin-bottom:8px}
+.checks{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.checks li{display:flex;gap:10px;align-items:flex-start}
+.ic{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:800;flex:none}
+.ic.ok{background:var(--brand-soft);color:var(--brand)}
+.ic.pend{background:var(--pend-soft);color:var(--pend)}
+.ic.info{background:#eeebe4;color:var(--muted)}
+
+/* A */
+.list{display:grid;gap:10px}
+.cardA{display:flex;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;cursor:pointer}
+.cardA:hover{border-color:var(--brand);box-shadow:0 4px 16px rgba(14,107,87,.08)}
+.cardA .grow{flex:1;min-width:0}
+.cardA .nm{font-weight:700;font-size:16px}
+.cardA .side{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex:none}
+.price{font-weight:700}
+@media(max-width:620px){.cardA{flex-wrap:wrap}.cardA .side{width:100%;flex-direction:row;flex-wrap:wrap;justify-content:space-between;align-items:center;text-align:left}}
+.pgrid{display:grid;grid-template-columns:360px 1fr;gap:16px;align-items:start}
+.pgrid>div{display:grid;gap:16px}
+@media(max-width:820px){.pgrid{grid-template-columns:1fr}}
+.hero{display:grid;gap:10px}
+.hero .who{display:flex;gap:14px;align-items:center}
+.hero .who b{font-size:20px;display:block}
+.cta{display:grid;gap:8px}
+
+/* B */
+.cmp{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:var(--radius)}
+.cmp table{border-collapse:separate;border-spacing:0;width:100%}
+.cmp th,.cmp td{padding:11px 12px;border-bottom:1px solid var(--line);text-align:center;min-width:170px;vertical-align:middle;font-size:14px}
+.cmp th:first-child,.cmp td:first-child{position:sticky;left:0;background:#faf8f3;text-align:left;min-width:140px;font-weight:600;font-size:13px;z-index:1;border-right:1px solid var(--line)}
+.cmp thead th{vertical-align:top}
+.cmp thead .av{margin:0 auto 6px}
+.cmp td.best{background:var(--brand-soft);font-weight:700}
+.cmp td.best::after{content:"mejor";display:block;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--brand)}
+.cmp .quote{font-size:12px;color:var(--muted);font-style:italic;text-align:left}
+.cmp .acts{display:grid;gap:6px}
+.scrim{position:fixed;inset:0;background:rgba(20,28,24,.45);z-index:20}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(460px,100%);background:var(--bg);z-index:21;overflow:auto;padding:16px 16px 130px;box-shadow:-10px 0 30px rgba(0,0,0,.15);display:grid;gap:14px;align-content:start}
+
+/* C */
+.prog{display:flex;justify-content:space-between;align-items:center;margin:16px 0 10px;font-size:14px}
+.dots{display:flex;gap:5px}
+.dots i{width:8px;height:8px;border-radius:50%;background:var(--line)}
+.dots i.on{background:var(--brand)}
+.cC{display:grid;gap:18px}
+.cC .who{text-align:center;display:grid;justify-items:center;gap:4px}
+.cC .who b{font-size:22px}
+.level{border-radius:12px;padding:12px 14px;display:grid;gap:6px}
+.level.hi{background:var(--brand-soft)} .level.mid{background:#eef3e6} .level.lo{background:var(--pend-soft)}
+.meter{height:8px;background:rgba(0,0,0,.08);border-radius:99px;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--brand);border-radius:99px}
+.level.lo .meter i{background:var(--pend)}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
+.facts div{background:#faf8f3;border-radius:10px;padding:10px 4px}
+.facts b{display:block;font-size:20px}
+details summary{cursor:pointer;font-weight:650;color:var(--brand)}
+details[open] summary{margin-bottom:12px}
+.decide{position:sticky;bottom:78px;display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;background:var(--bg);padding:8px 0}
+
+/* hired */
+.done{display:grid;gap:12px;margin-top:20px}
+.okbig{width:56px;height:56px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;font-size:28px}
+.steps{margin:0;padding-left:20px;display:grid;gap:10px}
+.code{font-family:ui-monospace,Consolas,monospace;font-size:18px;font-weight:800;letter-spacing:.2em;background:var(--brand-soft);color:var(--brand-2);padding:2px 8px;border-radius:6px}
+
+/* D: Indeed-style search + split list/detail */
+body:has(.vD){background:#fff}
+.vD{--brand:#2557a7;--brand-2:#164081;--brand-soft:#eef2fb;--ink:#2d2d2d;--muted:#6f6f6f;--line:#d4d2d0;--bg:#fff;--ok:#17663a;--ok-soft:#e4f4ea;color:var(--ink);font-family:"Noto Sans","Segoe UI",system-ui,sans-serif}
+.vD .b.ok,.vD .ic.ok{background:var(--ok-soft);color:var(--ok)}
+.d-wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+.d-top{border-bottom:1px solid var(--line);background:#fff}
+.d-top .d-wrap{display:flex;align-items:center;gap:22px;height:60px;font-size:14px}
+.d-logo{font-weight:800;font-size:22px;color:var(--brand);letter-spacing:-.03em;text-decoration:none}
+.d-nav{font-weight:600;height:60px;display:flex;align-items:center}
+.d-nav.on{box-shadow:inset 0 -3px 0 var(--brand)}
+.d-right{color:var(--brand);font-weight:600}
+.grow{flex:1}
+@media(max-width:820px){.d-hide-m{display:none!important}}
+.d-search{display:flex;border:1px solid var(--line);border-radius:12px;box-shadow:0 2px 6px rgba(0,0,0,.08);background:#fff;padding:6px;gap:4px}
+.d-search.big{padding:8px;font-size:16px}
+.d-field{flex:1;display:flex;align-items:center;gap:8px;padding:0 12px;min-width:0}
+.d-field+.d-field{border-left:1px solid var(--line)}
+.d-field input,.d-field select{border:0;outline:0;width:100%;padding:10px 0;font:inherit;background:transparent;color:var(--ink)}
+.d-field:focus-within{box-shadow:inset 0 -2px 0 var(--brand)}
+@media(max-width:620px){.d-search{flex-direction:column}.d-field+.d-field{border-left:0;border-top:1px solid var(--line)}}
+.d-btn{background:var(--brand);color:#fff;border:0;border-radius:8px;padding:11px 20px;font-weight:700}
+.d-btn:hover{background:var(--brand-2)}
+.d-btn.big{width:100%;padding:14px;font-size:16px;margin-top:14px}
+.d-home{max-width:860px;margin:0 auto;padding:56px 16px}
+.d-home h1{text-align:center;font-size:28px;margin:0 0 22px}
+.d-pop{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:16px;font-size:14px}
+.d-pill{border:1px solid var(--line);background:#fff;border-radius:99px;padding:7px 14px;font-weight:600;font-size:14px;color:var(--ink)}
+.d-pill:hover{border-color:var(--ink)}
+.d-pill.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+.d-promise{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:40px}
+.d-promise div{background:#f3f2f1;border-radius:12px;padding:16px;font-size:14px}
+.d-promise b{display:block;margin-bottom:4px}
+@media(max-width:620px){.d-promise{grid-template-columns:1fr}}
+.d-searchbar{border-bottom:1px solid var(--line);padding:14px 0}
+.d-searchbar .d-search{max-width:860px;margin:0 auto}
+.d-filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-top:14px}
+.d-sort{margin-left:auto;font-size:14px;color:var(--muted)}
+.d-sort select{border:0;font:inherit;font-weight:700;color:var(--ink);background:transparent}
+.d-count{font-size:14px;color:var(--muted);margin:14px 0 10px}
+.d-split{display:grid;grid-template-columns:minmax(0,440px) minmax(0,1fr);gap:20px;align-items:start}
+.d-list{display:grid;gap:12px}
+.d-card{border:1px solid var(--line);border-radius:10px;padding:16px;cursor:pointer;background:#fff}
+.d-card:hover{box-shadow:0 2px 10px rgba(0,0,0,.1)}
+.d-card:hover h3{text-decoration:underline}
+.d-card.sel{border-color:var(--brand);box-shadow:inset 4px 0 0 var(--brand)}
+.d-card h3{font-size:17px;margin:0}
+.d-card .flag{display:inline-block;font-size:12px;font-weight:700;color:var(--ok);margin-bottom:8px}
+.d-sub{font-size:14px}
+.d-tags{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.d-tag{background:#f3f2f1;border-radius:6px;padding:4px 8px;font-size:13px;font-weight:600;color:#595959}
+.d-tag.ok{background:var(--ok-soft);color:var(--ok)}
+.d-tag.pend{background:var(--pend-soft);color:var(--pend)}
+.d-card ul{margin:0;padding-left:18px;font-size:13px;color:#595959;display:grid;gap:2px}
+.d-foot{font-size:12px;color:var(--muted);margin-top:10px}
+.d-pane{position:sticky;top:12px;border:1px solid var(--line);border-radius:10px;max-height:calc(100vh - 24px);overflow:auto;background:#fff}
+.d-dhead{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);padding:18px 20px;z-index:2;box-shadow:0 4px 8px -6px rgba(0,0,0,.15)}
+.d-dhead h2{margin:0;font-size:22px}
+.d-actions{display:flex;gap:8px;margin-top:12px}
+.d-icon{width:46px;border:1px solid var(--line);background:#fff;border-radius:8px;font-size:18px}
+.d-icon.on{color:#c4232f}
+.d-dbody section{padding:18px 20px;border-bottom:1px solid var(--line)}
+.d-dbody section:last-child{border-bottom:0}
+.d-dl{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:14px;margin:0}
+.d-dl dt{color:var(--muted)} .d-dl dd{margin:0;font-weight:600}
+.d-mback{display:none;padding:10px 20px 0}
+.d-empty{padding:30px;text-align:center;border:1px dashed var(--line);border-radius:10px}
+@media(max-width:820px){
+  .d-split{grid-template-columns:1fr}
+  .d-pane{display:none;position:static;max-height:none;overflow:visible}
+  .d-split.show .d-list{display:none}
+  .d-split.show .d-pane{display:block}
+  .d-mback{display:block}
+}
+.d-modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(520px,calc(100% - 24px));max-height:calc(100vh - 40px);overflow:auto;background:#fff;border-radius:14px;z-index:21;padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.d-mhead{display:flex;justify-content:space-between;align-items:center;font-size:18px}
+.d-mhead button{border:0;background:none;font-size:20px;color:var(--muted)}
+.d-in{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:11px 12px;font:inherit}
+.d-in:focus{outline:2px solid var(--brand);border-color:transparent}
+
+/* prototype switcher — hidden in the MVP */
+#pbar{display:none!important}
+body{padding-bottom:24px}
+#pbar{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:50;background:#111;color:#fff;border-radius:999px;display:flex;align-items:center;gap:8px;padding:6px;box-shadow:0 8px 28px rgba(0,0,0,.35);outline:2px dashed #ffcf33;outline-offset:2px;font:13px/1.2 system-ui,sans-serif;max-width:calc(100% - 24px)}
+#pbar button{width:34px;height:34px;border-radius:50%;border:0;background:#2b2b2b;color:#fff;font-size:15px;flex:none}
+#pbar button:hover{background:#444}
+#pbar .lab{padding:0 4px;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#pbar .lab small{display:block;color:#aaa;font-size:11px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="pbar"></div>
+<script>
+const CATS=[
+  {id:'plomeria',name:'Plomería',icon:'🚰'},
+  {id:'electricidad',name:'Electricidad',icon:'💡'},
+  {id:'soldadura',name:'Soldadura',icon:'🔥'},
+  {id:'construccion',name:'Construcción y albañilería',icon:'🧱'},
+  {id:'otro',name:'Otro trabajito',icon:'🛠️'},
+];
+const ZONAS=['Col. Kennedy','Col. Palmira','Col. Miraflores','Lomas del Guijarro','Col. Tepeyac','Col. Florencia Norte','Col. Hato de Enmedio'];
+const WHEN=['Hoy','Mañana','Esta semana','Sin prisa'];
+
+const W=[
+ {id:1,name:'Carlos Méndez',oficio:'Plomero',cats:['plomeria'],zonas:['Col. Palmira','Lomas del Guijarro','Col. Tepeyac'],rating:4.9,reviews:87,jobs:132,years:12,since:2023,idVerified:true,bg:'ok',bgDate:'ago 2026',certs:['Instalaciones sanitarias – INFOP'],response:'30 min',respMin:30,price:[450,1200],color:'#2f6f9f',
+  bio:'Arreglo fugas, inodoros, calentadores y tuberías. Llego con mis herramientas y dejo todo limpio.',
+  photos:[['🚽','Cambio de inodoro'],['🚿','Ducha nueva'],['🔧','Fuga bajo lavatrastos']],
+  revs:[{who:'María José R.',zona:'Col. Palmira',date:'hace 2 semanas',stars:5,text:'Llegó a la hora, me explicó qué tenía el inodoro antes de cobrar y dejó todo limpio. Me sentí segura con él en casa.'},
+        {who:'Roberto G.',zona:'Col. Tepeyac',date:'hace 1 mes',stars:5,text:'Resolvió una fuga que otro plomero no pudo. Cobró lo que dijo que iba a costar.'}]},
+ {id:2,name:'Rosa Mejía',oficio:'Plomera',cats:['plomeria'],zonas:['Col. Miraflores','Col. Florencia Norte','Col. Kennedy'],rating:4.8,reviews:41,jobs:58,years:8,since:2024,idVerified:true,bg:'ok',bgDate:'jun 2026',certs:['Fontanería residencial – INFOP'],response:'1 h',respMin:60,price:[400,1000],color:'#9a4f8a',
+  bio:'Plomería general y calentadores. Muchas clientas me buscan porque se sienten más cómodas con una mujer en casa.',
+  photos:[['🛁','Grifería de baño'],['🔥','Calentador instalado'],['🚰','Tubería de cocina']],
+  revs:[{who:'Lucía M.',zona:'Col. Florencia Norte',date:'hace 5 días',stars:5,text:'Muy profesional y ordenada. Me mandó fotos del avance mientras yo estaba en el trabajo.'},
+        {who:'Jorge A.',zona:'Col. Miraflores',date:'hace 3 semanas',stars:4,text:'Buen trabajo, llegó 20 minutos tarde pero avisó por WhatsApp.'}]},
+ {id:3,name:'Javier López',oficio:'Plomero',cats:['plomeria'],zonas:['Col. Hato de Enmedio','Col. Kennedy','Col. Palmira'],rating:4.3,reviews:6,jobs:7,years:3,since:2026,idVerified:true,bg:'pending',bgDate:'',certs:[],response:'3 h',respMin:180,price:[300,800],color:'#5e7d3a',
+  bio:'Nuevo en Trabajitos. Trabajos pequeños de plomería a buen precio.',
+  photos:[['🔧','Cambio de llave'],['🚽','Destape']],
+  revs:[{who:'Andrea P.',zona:'Col. Hato de Enmedio',date:'hace 1 semana',stars:5,text:'Barato y rápido para un destape.'},
+        {who:'Luis C.',zona:'Col. Kennedy',date:'hace 2 semanas',stars:3,text:'Hizo el trabajo pero tuvo que regresar porque le faltó una pieza.'}]},
+ {id:4,name:'Ana Lucía Pérez',oficio:'Electricista',cats:['electricidad'],zonas:['Col. Palmira','Lomas del Guijarro','Col. Tepeyac'],rating:5.0,reviews:63,jobs:90,years:10,since:2023,idVerified:true,bg:'ok',bgDate:'jul 2026',certs:['Electricista certificada – INFOP','Instalaciones residenciales'],response:'45 min',respMin:45,price:[600,1800],color:'#c06a1b',
+  bio:'Cortos, tableros, tomacorrientes, lámparas e instalaciones nuevas. Trabajo con normas de seguridad.',
+  photos:[['⚡','Tablero nuevo'],['💡','Lámparas de sala'],['🔌','Tomas 220V']],
+  revs:[{who:'Fernando L.',zona:'Lomas del Guijarro',date:'hace 4 días',stars:5,text:'Encontró el corto en 20 minutos. Me explicó todo y me dio recomendaciones de seguridad.'},
+        {who:'Claudia S.',zona:'Col. Palmira',date:'hace 1 mes',stars:5,text:'Súper confiable, ya la contraté tres veces.'}]},
+ {id:5,name:'Mario Zelaya',oficio:'Electricista',cats:['electricidad'],zonas:['Col. Kennedy','Col. Miraflores','Col. Florencia Norte'],rating:4.7,reviews:112,jobs:205,years:18,since:2022,idVerified:true,bg:'ok',bgDate:'may 2026',certs:['Técnico electricista – INFOP'],response:'2 h',respMin:120,price:[500,1500],color:'#3a5a8c',
+  bio:'18 años de experiencia en casas y locales comerciales.',
+  photos:[['🔌','Cableado de local'],['💡','Iluminación exterior'],['⚡','Acometida']],
+  revs:[{who:'Sandra V.',zona:'Col. Florencia Norte',date:'hace 2 semanas',stars:5,text:'Sabe muchísimo. Cobró justo.'},
+        {who:'Pablo R.',zona:'Col. Kennedy',date:'hace 2 meses',stars:4,text:'Buen trabajo, solo que tardó en confirmar la cita.'}]},
+ {id:6,name:'Diego Ramírez',oficio:'Electricista',cats:['electricidad'],zonas:['Col. Hato de Enmedio','Col. Miraflores','Col. Palmira'],rating:4.5,reviews:12,jobs:15,years:4,since:2025,idVerified:true,bg:'ok',bgDate:'mar 2026',certs:[],response:'1 h',respMin:60,price:[450,1200],color:'#7a3b3b',
+  bio:'Instalaciones sencillas y reparaciones rápidas.',
+  photos:[['💡','Cambio de lámparas'],['🔌','Tomacorrientes']],
+  revs:[{who:'Karla D.',zona:'Col. Hato de Enmedio',date:'hace 3 semanas',stars:5,text:'Amable y puntual.'},
+        {who:'Esteban M.',zona:'Col. Palmira',date:'hace 1 mes',stars:4,text:'Bien, aunque no traía todas las piezas.'}]},
+ {id:7,name:'Edgar Banegas',oficio:'Soldador',cats:['soldadura'],zonas:['Col. Florencia Norte','Col. Miraflores','Col. Kennedy'],rating:4.8,reviews:54,jobs:76,years:15,since:2023,idVerified:true,bg:'ok',bgDate:'jun 2026',certs:['Soldadura MIG/TIG – INFOP'],response:'2 h',respMin:120,price:[800,2800],color:'#4f4f4f',
+  bio:'Portones, balcones, estructuras y reparaciones de metal.',
+  photos:[['🚪','Portón corredizo'],['🪜','Escalera metálica'],['🔥','Reparación de balcón']],
+  revs:[{who:'Héctor B.',zona:'Col. Florencia Norte',date:'hace 1 semana',stars:5,text:'El portón quedó perfecto y lo terminó en el día prometido.'},
+        {who:'Gabriela T.',zona:'Col. Miraflores',date:'hace 1 mes',stars:5,text:'Muy cuidadoso, protegió el piso y las paredes.'}]},
+ {id:8,name:'Luis Fernando Ordóñez',oficio:'Soldador',cats:['soldadura','construccion'],zonas:['Col. Hato de Enmedio','Col. Kennedy','Col. Palmira'],rating:4.6,reviews:19,jobs:25,years:7,since:2025,idVerified:true,bg:'pending',bgDate:'',certs:[],response:'4 h',respMin:240,price:[600,2000],color:'#6b5a2f',
+  bio:'Herrería y pequeñas estructuras.',
+  photos:[['🪟','Balcones'],['🚪','Puerta de metal']],
+  revs:[{who:'Rodrigo F.',zona:'Col. Hato de Enmedio',date:'hace 2 semanas',stars:5,text:'Buen precio para los balcones.'},
+        {who:'Mónica E.',zona:'Col. Kennedy',date:'hace 2 meses',stars:4,text:'Buen trabajo, tardó en responder.'}]},
+ {id:9,name:'Óscar Barrios',oficio:'Maestro de obra',cats:['construccion'],zonas:['Lomas del Guijarro','Col. Tepeyac','Col. Palmira'],rating:4.9,reviews:38,jobs:44,years:20,since:2023,idVerified:true,bg:'ok',bgDate:'abr 2026',certs:['Maestro de obras – INFOP'],response:'3 h',respMin:180,price:[1200,15000],color:'#8a6a1f',
+  bio:'Ampliaciones, muros, pisos y remodelaciones. Trabajo con mi equipo de 2 ayudantes (también verificados).',
+  photos:[['🧱','Muro perimetral'],['🏠','Ampliación de cuarto'],['🪵','Piso nuevo']],
+  revs:[{who:'Ricardo O.',zona:'Col. Tepeyac',date:'hace 3 semanas',stars:5,text:'Me dio un presupuesto por escrito y lo respetó. Sus ayudantes también muy respetuosos.'},
+        {who:'Elena W.',zona:'Col. Palmira',date:'hace 2 meses',stars:5,text:'Remodelaron el baño en una semana.'}]},
+ {id:10,name:'Wendy Chávez',oficio:'Albañilería y acabados',cats:['construccion'],zonas:['Col. Florencia Norte','Col. Miraflores'],rating:4.7,reviews:27,jobs:33,years:9,since:2024,idVerified:true,bg:'ok',bgDate:'feb 2026',certs:[],response:'1 h',respMin:60,price:[900,9000],color:'#2f7f73',
+  bio:'Repellos, pintura, azulejo y acabados finos.',
+  photos:[['🎨','Pintura de fachada'],['🧱','Azulejo de cocina']],
+  revs:[{who:'Daniela H.',zona:'Col. Florencia Norte',date:'hace 1 semana',stars:5,text:'Muy detallista con los acabados.'},
+        {who:'Marco P.',zona:'Col. Miraflores',date:'hace 1 mes',stars:4,text:'Buen trabajo, se extendió un día más.'}]},
+ {id:11,name:'Kevin Morales',oficio:'Albañil',cats:['construccion'],zonas:['Col. Hato de Enmedio','Col. Kennedy'],rating:4.2,reviews:4,jobs:5,years:2,since:2026,idVerified:false,bg:'pending',bgDate:'',certs:[],response:'5 h',respMin:300,price:[800,6000],color:'#7d6b8f',
+  bio:'Recién registrado. Trabajos de albañilería en general.',
+  photos:[['🧱','Muro de block']],
+  revs:[{who:'Julio N.',zona:'Col. Hato de Enmedio',date:'hace 3 semanas',stars:4,text:'Trabajo bien hecho, aunque no tenía todas las herramientas.'}]},
+ {id:12,name:'Pedro Matute',oficio:'Todero / mantenimiento',cats:['otro','plomeria','electricidad'],zonas:['Col. Palmira','Lomas del Guijarro','Col. Tepeyac','Col. Miraflores','Col. Florencia Norte'],rating:4.8,reviews:95,jobs:160,years:11,since:2022,idVerified:true,bg:'ok',bgDate:'ago 2026',certs:[],response:'20 min',respMin:20,price:[300,900],color:'#1f6f8b',
+  bio:'Cuelgo cuadros, armo muebles, cambio chapas y hago reparaciones pequeñas de todo tipo.',
+  photos:[['🪑','Armado de muebles'],['🖼️','Repisas y cuadros'],['🔐','Cambio de chapa']],
+  revs:[{who:'Isabel C.',zona:'Lomas del Guijarro',date:'hace 3 días',stars:5,text:'Le dejé una lista de 8 cosas y las hizo todas en una mañana.'},
+        {who:'Tomás Q.',zona:'Col. Palmira',date:'hace 3 semanas',stars:5,text:'Ya es nuestro señor de confianza para todo.'}]},
+];
+
+const STEP_ES={request:'solicitud',results:'resultados',profile:'perfil',hired:'contratado'};
+const VARIANTS=[['D','Estilo Indeed']];
+const state={
+  variant:'D',
+  f:{verified:false,top:false,near:false,sort:'rel'}, modal:null, saved:new Set(),
+  step:'request', // request | results | profile | hired
+  req:{cat:'plomeria',what:'Plomero',desc:'El inodoro no deja de correr agua y el tanque gotea.',zona:'Col. Palmira',when:'Hoy',addr:''},
+  sel:null, idx:0,
+};
+if(!VARIANTS.some(v=>v[0]===state.variant)) state.variant='D';
+
+const $app=document.getElementById('app'), $bar=document.getElementById('pbar');
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const q=n=>'L'+n.toLocaleString('en-US');
+const byId=id=>W.find(w=>w.id===id);
+const first=w=>w.name.split(' ')[0];
+const catName=()=>CATS.find(c=>c.id===state.req.cat).name;
+const isNear=w=>w.zonas.includes(state.req.zona);
+const score=w=>(w.idVerified?2:0)+(w.bg==='ok'?2:0)+w.rating*Math.log10(w.reviews+1)+(w.certs.length?1:0);
+function matches(){
+  const l=W.filter(w=>state.req.cat==='otro'||w.cats.includes(state.req.cat));
+  return l.sort((a,b)=>(isNear(b)-isNear(a))||(score(b)-score(a)));
+}
+const avatar=(w,s)=>`<div class="av" style="--c:${w.color};width:${s}px;height:${s}px;font-size:${Math.round(s*.36)}px">${w.name.split(' ').slice(0,2).map(p=>p[0]).join('')}</div>`;
+const nearTag=w=>isNear(w)?`<span class="near">📍 Atiende ${esc(state.req.zona)}</span>`:`<span class="far">Atiende: ${w.zonas.slice(0,2).join(', ')}</span>`;
+const badges=w=>`<div class="badges">
+  <span class="b ${w.idVerified?'ok':'pend'}">${w.idVerified?'✓ Identidad verificada':'⏳ Identidad sin verificar'}</span>
+  <span class="b ${w.bg==='ok'?'ok':'pend'}">${w.bg==='ok'?'✓ Sin antecedentes':'⏳ Antecedentes en revisión'}</span>
+  ${w.certs.length?'<span class="b ok">✓ Certificado</span>':''}</div>`;
+const photos=w=>`<div class="phs">${w.photos.map(([e,t],i)=>`<div class="ph" style="--h:${(w.id*47+i*60)%360}"><span>${e}</span><small>${t}</small></div>`).join('')}</div>`;
+function reviews(w,mineFirst){
+  let rs=[...w.revs];
+  if(mineFirst) rs.sort((a,b)=>(b.zona===state.req.zona)-(a.zona===state.req.zona));
+  return rs.map(r=>{const mine=mineFirst&&r.zona===state.req.zona;
+    return `<div class="rev ${mine?'mine':''}"><div class="h"><b>${r.who} · ${mine?'📍 vecina/o de '+r.zona:r.zona}</b><span class="stars">${'★'.repeat(r.stars)}</span></div>
+    <p>${r.text}</p><div class="sm muted">${r.date} · <span class="paid">✓ Trabajo pagado en Trabajitos</span></div></div>`}).join('');
+}
+function signals(w){
+  return [
+    {st:w.idVerified?'ok':'pend',label:'Identidad verificada',detail:w.idVerified?'DNI revisado y selfie confirmada con el documento':'Aún no completa la verificación de DNI'},
+    {st:w.bg==='ok'?'ok':'pend',label:'Antecedentes penales y policíacos',detail:w.bg==='ok'?`Sin antecedentes · revisado ${w.bgDate}`:'En revisión — normalmente toma 3 a 5 días'},
+    {st:w.reviews>=10?'ok':'info',label:`${w.rating} ★ de ${w.reviews} clientes`,detail:w.reviews>=10?'Solo opinan clientes que pagaron un trabajo':'Pocas reseñas todavía: es nuevo en la plataforma'},
+    {st:'info',label:`${w.jobs} trabajitos completados`,detail:`En Trabajitos desde ${w.since}`},
+    {st:w.certs.length?'ok':'info',label:w.certs.length?w.certs.join(' · '):'Sin certificación registrada',detail:`${w.years} años de experiencia`},
+    {st:'info',label:`Responde en ~${w.response}`,detail:`Precio típico ${q(w.price[0])}–${q(w.price[1])} · visita de diagnóstico L150`},
+  ];
+}
+const icon={ok:'✓',pend:'⏳',info:'•'};
+const checklist=w=>`<ul class="checks">${signals(w).map(s=>`<li><span class="ic ${s.st}">${icon[s.st]}</span><div><b>${s.label}</b><div class="sm muted">${s.detail}</div></div></li>`).join('')}</ul>`;
+function trustLevel(w){
+  const pct=Math.round((w.idVerified?25:0)+(w.bg==='ok'?25:0)+Math.min(w.reviews,30)/30*25+(w.certs.length?10:0)+Math.min(w.jobs,50)/50*15);
+  const why=[];
+  if(!w.idVerified) why.push('identidad sin verificar');
+  if(w.bg!=='ok') why.push('antecedentes en revisión');
+  if(w.reviews<10) why.push('pocas reseñas');
+  if(pct>=80) return {k:'hi',label:'Alta',pct,why:'Verificado, sin antecedentes y con muchas reseñas de clientes reales.'};
+  if(pct>=50) return {k:'mid',label:'Media',pct,why:'Ojo: '+why.join(', ')+'.'};
+  return {k:'lo',label:'En construcción',pct,why:'Ojo: '+why.join(', ')+'.'};
+}
+
+/* ---------- shared screens ---------- */
+const header=()=>`<header class="top"><div class="wrap"><span class="logo">trabajitos</span><span class="tag">Gente de confianza para tu casa</span></div></header>`;
+const reqSummary=()=>`<div class="reqbar"><div class="wrap"><div><b>${catName()}</b> · ${esc(state.req.zona)} · ${state.req.when}<div class="muted sm">“${esc(state.req.desc)}”</div></div><button class="link" data-act="edit">Editar</button></div></div>`;
+
+function viewRequest(){
+  const r=state.req;
+  return `<main class="wrap narrow">
+  <h1>¿Qué trabajito necesitas?</h1>
+  <p class="muted">Cuéntanos el problema y te mostramos profesionales verificados cerca de ti.</p>
+  <div class="cats">${CATS.map(c=>`<button class="cat ${r.cat===c.id?'on':''}" data-act="cat" data-id="${c.id}"><span>${c.icon}</span>${c.name}</button>`).join('')}</div>
+  <label class="lbl" for="desc">Describe el problema</label>
+  <textarea id="desc" rows="3" placeholder="Ej: el inodoro no deja de correr agua">${esc(r.desc)}</textarea>
+  <div class="row2">
+    <div><label class="lbl" for="zona">¿Dónde?</label><select id="zona">${ZONAS.map(z=>`<option ${z===r.zona?'selected':''}>${z}</option>`).join('')}</select></div>
+    <div><label class="lbl">¿Cuándo?</label><div class="chips">${WHEN.map(w=>`<button class="chip ${r.when===w?'on':''}" data-act="when" data-id="${w}">${w}</button>`).join('')}</div></div>
+  </div>
+  <button class="btn big" data-act="search">Buscar profesionales</button>
+  <p class="fine">🔒 Revisamos identidad y antecedentes. Siempre te mostramos qué está confirmado y qué no.</p>
+  </main>`;
+}
+
+function viewHired(){
+  const w=byId(state.sel), code=String(1000+(w.id*7919)%9000);
+  return `<main class="wrap narrow"><div class="card done">
+   <div class="okbig">✓</div>
+   <h1 style="margin:0">Solicitud enviada a ${w.name}</h1>
+   <p class="muted" style="margin:0">${catName()} · ${esc(state.req.zona)} · ${state.req.when} · ${q(w.price[0])}–${q(w.price[1])} aprox.</p>
+   <h3 style="margin-top:8px">Qué pasa ahora</h3>
+   <ol class="steps">
+     <li><b>${first(w)} confirma</b>, normalmente en ~${w.response}. Si no puede, te avisamos y te sugerimos otra opción.</li>
+     <li><b>Reconócelo al llegar.</b> Verás su foto, y te dirá este código: <span class="code">${code}</span>. Si no lo sabe, no abras la puerta.</li>
+     <li><b>Pagas al terminar</b>, cuando estés conforme. Después dejas tu reseña.</li>
+   </ol>
+   <button class="btn ghost" data-act="share">👪 Compartir la visita con un familiar</button>
+   <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
+     <button class="link" data-act="back">← Cambiar de profesional</button>
+     <button class="link" data-act="restart">Pedir otro trabajito</button>
+   </div>
+  </div></main>`;
+}
+
+/* ---------- Variant A: cards list → full profile with trust panel ---------- */
+const cardA=w=>`<article class="cardA" data-act="open" data-id="${w.id}">
+  ${avatar(w,56)}
+  <div class="grow">
+    <div class="nm">${w.name}</div>
+    <div class="muted sm">${w.oficio} · ${w.years} años de experiencia</div>
+    <div class="sm" style="margin-top:4px"><span class="stars">★ ${w.rating}</span> (${w.reviews} reseñas) · ${w.jobs} trabajos</div>
+    ${badges(w)}
+  </div>
+  <div class="side"><span class="price">${q(w.price[0])}–${q(w.price[1])}</span><span class="muted sm">Responde en ~${w.response}</span>${nearTag(w)}<span class="link">Ver perfil →</span></div>
+</article>`;
+function viewA(){
+  if(state.step==='profile') return profileA(byId(state.sel));
+  const l=matches();
+  return `${reqSummary()}<main class="wrap"><h2>${l.length} profesionales para tu trabajito</h2><div class="list">${l.map(cardA).join('')}</div></main>`;
+}
+function profileA(w){
+  return `${reqSummary()}<main class="wrap">
+  <button class="link" data-act="back">← Ver más opciones</button>
+  <div class="pgrid">
+    <div>
+      <section class="card hero">
+        <div class="who">${avatar(w,80)}<div><b>${w.name}</b><span class="muted">${w.oficio}</span><div class="sm"><span class="stars">★ ${w.rating}</span> · ${w.reviews} reseñas · ${w.jobs} trabajos</div></div></div>
+        ${nearTag(w)}
+        <p style="margin:0">${w.bio}</p>
+        <div class="cta"><button class="btn" data-act="hire" data-id="${w.id}">Contratar a ${first(w)}</button><button class="btn ghost" data-act="back">Ver más opciones</button></div>
+      </section>
+      <section class="card"><h3>Por qué puedes confiar en ${first(w)}</h3>${checklist(w)}</section>
+    </div>
+    <div>
+      <section class="card"><h3>Trabajos anteriores</h3>${photos(w)}</section>
+      <section class="card"><h3>Reseñas (${w.reviews})</h3>${reviews(w,false)}</section>
+    </div>
+  </div></main>`;
+}
+
+/* ---------- Variant B: side-by-side comparison table, profile in a drawer ---------- */
+function viewB(){
+  const l=matches();
+  const ok=(v,t,f)=>v?`<span class="b ok">✓ ${t}</span>`:`<span class="b pend">⏳ ${f}</span>`;
+  const rows=[
+    ['Identidad',w=>ok(w.idVerified,'Verificada','Sin verificar')],
+    ['Antecedentes',w=>ok(w.bg==='ok','Limpios','En revisión')],
+    ['Calificación',w=>`<span class="stars">★ ${w.rating}</span>`,w=>w.rating,'max'],
+    ['Reseñas',w=>w.reviews,w=>w.reviews,'max'],
+    ['Trabajos completados',w=>w.jobs,w=>w.jobs,'max'],
+    ['Experiencia',w=>w.years+' años',w=>w.years,'max'],
+    ['Certificación',w=>w.certs[0]?`<span class="sm">${w.certs[0]}</span>`:'<span class="muted">—</span>'],
+    ['Atiende tu colonia',w=>isNear(w)?'📍 Sí':'<span class="muted">No</span>'],
+    ['Responde en',w=>'~'+w.response,w=>-w.respMin,'max'],
+    ['Precio típico',w=>`${q(w.price[0])}–${q(w.price[1])}`,w=>-w.price[0],'max'],
+    ['Reseña reciente',w=>`<div class="quote">“${w.revs[0].text.slice(0,80)}${w.revs[0].text.length>80?'…':''}”</div>`],
+  ];
+  const body=rows.map(([label,cell,num])=>{
+    const best=num?Math.max(...l.map(num)):null;
+    return `<tr><td>${label}</td>${l.map(w=>`<td class="${num&&l.length>1&&num(w)===best?'best':''}">${cell(w)}</td>`).join('')}</tr>`;
+  }).join('');
+  const table=`<div class="cmp"><table>
+    <thead><tr><th>${l.length} opciones</th>${l.map(w=>`<th>${avatar(w,48)}<div>${w.name}</div><div class="muted sm" style="font-weight:400">${w.oficio}</div></th>`).join('')}</tr></thead>
+    <tbody>${body}
+    <tr><td></td>${l.map(w=>`<td><div class="acts"><button class="btn sm" data-act="hire" data-id="${w.id}">Contratar</button><button class="btn ghost sm" data-act="open" data-id="${w.id}">Ver perfil</button></div></td>`).join('')}</tr>
+    </tbody></table></div>`;
+  let drawer='';
+  if(state.step==='profile'){
+    const w=byId(state.sel);
+    drawer=`<div class="scrim" data-act="close"></div><aside class="drawer">
+      <button class="link" data-act="close" style="justify-self:start">✕ Seguir comparando</button>
+      <div style="display:flex;gap:12px;align-items:center">${avatar(w,64)}<div><b style="font-size:18px">${w.name}</b><div class="muted">${w.oficio} · <span class="stars">★ ${w.rating}</span> (${w.reviews})</div></div></div>
+      ${badges(w)}
+      <p style="margin:0">${w.bio}</p>
+      <section class="card"><h3>Trabajos anteriores</h3>${photos(w)}</section>
+      <section class="card"><h3>Reseñas</h3>${reviews(w,false)}</section>
+      <section class="card"><h3>Verificaciones</h3>${checklist(w)}</section>
+      <button class="btn" data-act="hire" data-id="${w.id}">Contratar a ${first(w)}</button>
+    </aside>`;
+  }
+  return `${reqSummary()}<main class="wrap"><h2>Compara antes de elegir</h2>${table}</main>${drawer}`;
+}
+
+/* ---------- Variant C: one curated option at a time, hire or see next ---------- */
+function viewC(){
+  const l=matches(), i=state.idx;
+  if(i>=l.length) return `${reqSummary()}<main class="wrap narrow"><div class="card done">
+    <h2 style="margin:0">Ya viste las ${l.length} opciones</h2>
+    <p class="muted" style="margin:0">Puedes volver a revisarlas o cambiar tu solicitud (otra colonia u otro horario puede darte más opciones).</p>
+    <button class="btn" data-act="first">Volver a la primera</button><button class="btn ghost" data-act="edit">Cambiar mi solicitud</button></div></main>`;
+  const w=l[i], lv=trustLevel(w);
+  return `${reqSummary()}<main class="wrap narrow">
+  <div class="prog"><span>Opción <b>${i+1}</b> de ${l.length}${i===0?' · <b style="color:var(--brand)">Mejor coincidencia</b>':''}</span><span class="dots">${l.map((_,j)=>`<i class="${j===i?'on':''}"></i>`).join('')}</span></div>
+  <article class="card cC">
+    <div class="who">${avatar(w,96)}<b>${w.name}</b><span class="muted">${w.oficio}</span>${nearTag(w)}</div>
+    <div class="level ${lv.k}"><b>Nivel de confianza: ${lv.label}</b><div class="meter"><i style="width:${lv.pct}%"></i></div><span class="sm">${lv.why}</span></div>
+    <div class="facts"><div><b><span class="stars">★</span> ${w.rating}</b><span class="sm muted">${w.reviews} reseñas</span></div><div><b>${w.jobs}</b><span class="sm muted">trabajos hechos</span></div><div><b>${w.years}</b><span class="sm muted">años de exp.</span></div></div>
+    <section><h3>Lo que dicen tus vecinos</h3>${reviews(w,true)}</section>
+    <section><h3>Su trabajo</h3>${photos(w)}</section>
+    <p style="margin:0">${w.bio} <span class="muted">· ${q(w.price[0])}–${q(w.price[1])} · responde en ~${w.response}</span></p>
+    <details><summary>Ver verificaciones y detalles</summary>${checklist(w)}</details>
+  </article>
+  <div class="decide"><button class="btn ghost" data-act="next">Ver otra opción →</button><button class="btn" data-act="hire" data-id="${w.id}">Contratar a ${first(w)}</button></div>
+  ${i>0?'<button class="link" data-act="prev">← Opción anterior</button>':''}
+  </main>`;
+}
+
+/* ---------- Variant D: Indeed-style search bar + list left / detail right ---------- */
+const CAT_WORDS=[
+  ['plomeria',/plom|inodoro|fuga|agua|tuber|grifo|llave|calentador|drenaje|destap/],
+  ['electricidad',/electr|luz|corto|enchufe|toma|l[aá]mpara|breaker|tablero/],
+  ['soldadura',/sold|port[oó]n|metal|herrer|balc/],
+  ['construccion',/constr|alba[nñ]|muro|pared|piso|obra|remodel|azulejo|repello|pint/],
+];
+const catFromText=t=>(CAT_WORDS.find(([,r])=>r.test(t.toLowerCase()))||['otro'])[0];
+const POP=['Plomero','Electricista','Soldador','Albañil','Fuga de agua','Todero'];
+const headerD=()=>`<header class="d-top"><div class="d-wrap"><a class="d-logo" href="/">trabajitos</a><span class="d-nav on d-hide-m">Buscar profesionales</span><span class="d-nav d-hide-m">Mis solicitudes</span><span class="grow"></span><span class="d-right d-hide-m">Ofrecer mis servicios</span><span class="d-right">Iniciar sesión</span></div></header>`;
+const searchD=big=>`<div class="d-search ${big?'big':''}">
+  <label class="d-field"><span>🔍</span><input id="what" value="${esc(state.req.what)}" placeholder="Oficio o problema: plomero, fuga, portón…" autocomplete="off"></label>
+  <label class="d-field"><span>📍</span><select id="zonaD">${ZONAS.map(z=>`<option ${z===state.req.zona?'selected':''}>${z}</option>`).join('')}</select></label>
+  <button class="d-btn" data-act="searchD">Buscar</button></div>`;
+function listD(){
+  const f=state.f;
+  const l=matches().filter(w=>(!f.verified||(w.idVerified&&w.bg==='ok'))&&(!f.top||w.rating>=4.7)&&(!f.near||isNear(w)));
+  const by={rating:(a,b)=>b.rating-a.rating||b.reviews-a.reviews,price:(a,b)=>a.price[0]-b.price[0],resp:(a,b)=>a.respMin-b.respMin}[f.sort];
+  return by?l.sort(by):l;
+}
+const verifiedTag=w=>w.idVerified&&w.bg==='ok'?'<span class="d-tag ok">✓ Verificado</span>'
+  :`<span class="d-tag pend">⏳ ${w.idVerified?'Antecedentes en revisión':'Identidad sin verificar'}</span>`;
+const cardD=(w,sel)=>`<article class="d-card ${sel?'sel':''}" data-act="open" data-id="${w.id}">
+  ${w.rating>=4.8&&w.reviews>=30?'<span class="flag">★ Muy recomendado</span>':''}
+  <div style="display:flex;gap:12px;align-items:flex-start">${avatar(w,44)}<div style="min-width:0"><h3>${w.name}</h3><div class="d-sub">${w.oficio}</div><div class="d-sub muted">${w.zonas.join(' · ')}</div></div></div>
+  <div class="sm" style="margin-top:8px"><span class="stars">★ ${w.rating}</span> <span class="muted">(${w.reviews} reseñas)</span></div>
+  <div class="d-tags">${verifiedTag(w)}<span class="d-tag">${q(w.price[0])}–${q(w.price[1])}</span><span class="d-tag">Responde en ~${w.response}</span></div>
+  <ul><li>${w.bio}</li><li>“${w.revs[0].text.slice(0,90)}${w.revs[0].text.length>90?'…':''}”</li></ul>
+  <div class="d-foot">${w.jobs} trabajos completados · en Trabajitos desde ${w.since}</div>
+</article>`;
+function detailD(w){
+  const saved=state.saved.has(w.id);
+  return `<div class="d-mback"><button class="link" data-act="back">← Volver a resultados</button></div>
+  <div class="d-dhead">
+    <div style="display:flex;gap:14px;align-items:center">${avatar(w,56)}<div><h2>${w.name}</h2><div>${w.oficio} · ${nearTag(w)}</div></div></div>
+    <div class="sm" style="margin-top:8px"><span class="stars">★ ${w.rating}</span> · ${w.reviews} reseñas · ${w.jobs} trabajos</div>
+    <div style="margin-top:4px;font-weight:600">${q(w.price[0])}–${q(w.price[1])} <span class="muted" style="font-weight:400">· visita de diagnóstico L150</span></div>
+    <div class="d-actions"><button class="d-btn" data-act="hire" data-id="${w.id}">Contratar a ${first(w)}</button><button class="d-icon ${saved?'on':''}" data-act="save" data-id="${w.id}" title="Guardar">${saved?'♥':'♡'}</button></div>
+  </div>
+  <div class="d-dbody">
+    <section><h3>Confianza y verificaciones</h3>${checklist(w)}</section>
+    <section><h3>Detalles del servicio</h3><dl class="d-dl">
+      <dt>Oficio</dt><dd>${w.oficio}</dd><dt>Experiencia</dt><dd>${w.years} años</dd>
+      <dt>Certificación</dt><dd>${w.certs.join(', ')||'—'}</dd><dt>Precio típico</dt><dd>${q(w.price[0])}–${q(w.price[1])}</dd>
+      <dt>Responde en</dt><dd>~${w.response}</dd><dt>Colonias</dt><dd>${w.zonas.join(', ')}</dd></dl></section>
+    <section><h3>Sobre ${first(w)}</h3><p style="margin:0">${w.bio}</p></section>
+    <section><h3>Trabajos anteriores</h3>${photos(w)}</section>
+    <section><h3>Reseñas</h3>${reviews(w,true)}</section>
+  </div>`;
+}
+function modalD(){
+  const w=byId(state.modal), r=state.req;
+  return `<div class="scrim" data-act="closeModal"></div><div class="d-modal" role="dialog" aria-label="Contratar">
+  <div class="d-mhead"><b>Contratar a ${w.name}</b><button data-act="closeModal" aria-label="Cerrar">✕</button></div>
+  <div class="sm muted">${w.oficio} · <span class="stars">★ ${w.rating}</span> (${w.reviews}) · ${q(w.price[0])}–${q(w.price[1])}</div>
+  ${badges(w)}
+  <label class="lbl" for="desc">Describe el problema</label><textarea id="desc" rows="3" placeholder="Ej: el inodoro no deja de correr agua">${esc(r.desc)}</textarea>
+  <label class="lbl">¿Cuándo?</label><div class="chips">${WHEN.map(x=>`<button class="chip ${r.when===x?'on':''}" data-act="when" data-id="${x}">${x}</button>`).join('')}</div>
+  <label class="lbl" for="addr">Dirección o referencia</label><input class="d-in" id="addr" value="${esc(r.addr)}" placeholder="Ej: ${esc(r.zona)}, bloque B, casa 24, frente a la pulpería">
+  <p class="sm muted">🔒 Tu dirección solo se comparte con ${first(w)} cuando confirme la visita.</p>
+  <button class="d-btn big" data-act="send">Enviar solicitud</button></div>`;
+}
+function viewD(){
+  if(state.step==='request') return headerD()+`<main class="d-home"><h1>Encuentra gente de confianza para tu casa</h1>${searchD(true)}
+    <div class="d-pop"><span class="muted">Búsquedas populares:</span>${POP.map(p=>`<button class="d-pill" data-act="pop" data-id="${p}">${p}</button>`).join('')}</div>
+    <div class="d-promise"><div><b>✓ Identidad verificada</b>Revisamos el DNI de cada profesional.</div><div><b>✓ Antecedentes revisados</b>Penales y policíacos. Si están pendientes, te lo decimos.</div><div><b>✓ Reseñas reales</b>Solo opinan clientes que pagaron un trabajo.</div></div></main>`;
+  if(state.step==='hired') return headerD()+viewHired();
+  const l=listD(), f=state.f, selW=l.find(w=>w.id===state.sel)||l[0];
+  const pill=(k,t)=>`<button class="d-pill ${f[k]?'on':''}" data-act="filt" data-id="${k}">${t}</button>`;
+  return headerD()+`<div class="d-searchbar"><div class="d-wrap">${searchD(false)}</div></div>
+  <div class="d-wrap">
+    <div class="d-filters">${pill('verified','✓ Solo verificados')}${pill('top','★ 4.7 o más')}${pill('near','📍 Atiende mi colonia')}
+      <label class="d-sort">Ordenar por: <select id="sortD">${[['rel','Relevancia'],['rating','Calificación'],['price','Precio más bajo'],['resp','Responde más rápido']].map(([k,t])=>`<option value="${k}" ${f.sort===k?'selected':''}>${t}</option>`).join('')}</select></label></div>
+    <div class="d-count">${l.length} profesionales de <b>${catName()}</b> en ${esc(state.req.zona)}</div>
+    ${l.length?`<div class="d-split ${state.step==='profile'?'show':''}"><div class="d-list">${l.map(w=>cardD(w,w===selW)).join('')}</div><div class="d-pane">${detailD(selW)}</div></div>`
+      :`<div class="d-empty"><b>Ningún profesional cumple estos filtros.</b><br><button class="link" data-act="clearF">Quitar filtros</button></div>`}
+  </div>${state.modal?modalD():''}`;
+}
+function searchFromD(){state.req.cat=catFromText(state.req.what);state.step='results';state.sel=null}
+
+/* ---------- render + actions ---------- */
+function render(){
+  if(state.variant==='D') $app.innerHTML=`<div class="vD">${viewD()}</div>`;
+  else{
+    let html;
+    if(state.step==='request') html=viewRequest();
+    else if(state.step==='hired') html=viewHired();
+    else html={A:viewA,B:viewB,C:viewC}[state.variant]();
+    $app.innerHTML=header()+html;
+  }
+  const v=VARIANTS.find(x=>x[0]===state.variant);
+  $bar.innerHTML=`<button data-pv="-1" title="Variante anterior (←)">◀</button>
+    <div class="lab"><b>${v[0]}</b> · ${v[1]}<small>${state.variant!=='D'&&(state.step==='request'||state.step==='hired')?'<span style="color:#ffcf33">pantalla igual en A/B/C</span> · ':''}paso: ${STEP_ES[state.step]} ·${matches().length} resultados${state.sel?' · elegido: '+first(byId(state.sel)):''}</small></div>
+    <button data-pv="1" title="Siguiente variante (→)">▶</button>`;
+}
+function setVariant(k){
+  state.variant=k;
+  try{const u=new URL(location.href);u.searchParams.set('variant',k);history.replaceState(null,'',u)}catch(e){}
+  render();
+}
+function cycle(d){const i=VARIANTS.findIndex(v=>v[0]===state.variant);setVariant(VARIANTS[(i+d+VARIANTS.length)%VARIANTS.length][0])}
+
+document.addEventListener('click',e=>{
+  const pv=e.target.closest('[data-pv]'); if(pv){cycle(+pv.dataset.pv);return}
+  const el=e.target.closest('[data-act]'); if(!el) return;
+  const act=el.dataset.act, id=el.dataset.id, l=matches();
+  let top=true;
+  switch(act){
+    case 'cat': state.req.cat=id; top=false; break;
+    case 'when': state.req.when=id; top=false; break;
+    case 'search': state.step='results'; state.idx=0; state.sel=null; break;
+    case 'edit': state.step='request'; break;
+    case 'open': state.sel=+id; state.idx=Math.max(0,l.findIndex(w=>w.id===+id)); state.step='profile';
+      top=state.variant==='D'?window.innerWidth<820:state.variant!=='B'; break;
+    case 'close': state.step='results'; top=false; break;
+    case 'back': state.step=state.step==='hired'?'profile':'results'; break;
+    case 'hire': if(state.variant==='D'){state.modal=+id;top=false;break}
+      state.sel=+id; state.step='hired'; break;
+    case 'send': state.sel=state.modal; state.modal=null; state.step='hired'; break;
+    case 'closeModal': state.modal=null; top=false; break;
+    case 'searchD': searchFromD(); break;
+    case 'pop': state.req.what=id; searchFromD(); break;
+    case 'filt': state.f[id]=!state.f[id]; top=false; break;
+    case 'clearF': Object.assign(state.f,{verified:false,top:false,near:false}); top=false; break;
+    case 'save': state.saved.has(+id)?state.saved.delete(+id):state.saved.add(+id); top=false; break;
+    case 'next': state.idx++; state.sel=null; break;
+    case 'prev': state.idx=Math.max(0,state.idx-1); break;
+    case 'first': state.idx=0; break;
+    case 'share': alert('(Prototipo) Se enviaría por WhatsApp: nombre, foto y código de visita del profesional, con la dirección y hora.'); return;
+    case 'restart': state.step='request'; state.sel=null; state.idx=0; break;
+  }
+  render(); if(top) window.scrollTo(0,0);
+});
+document.addEventListener('input',e=>{
+  if(e.target.id==='desc') state.req.desc=e.target.value;
+  if(e.target.id==='zona'||e.target.id==='zonaD') state.req.zona=e.target.value;
+  if(e.target.id==='what') state.req.what=e.target.value;
+  if(e.target.id==='addr') state.req.addr=e.target.value;
+});
+document.addEventListener('change',e=>{
+  if(e.target.id==='sortD'){state.f.sort=e.target.value;render()}
+});
+document.addEventListener('keydown',e=>{
+  const t=e.target;
+  if(e.key==='Enter'&&t.id==='what'){searchFromD();render();return}
+  if(e.key==='Escape'&&state.modal){state.modal=null;render();return}
+  if(t.matches('input,textarea,select,[contenteditable]')) return;
+});
+// Deep links from the landing page: /app/?q=fuga&colonia=Col.%20Palmira
+const P=new URLSearchParams(location.search);
+if(ZONAS.includes(P.get('colonia'))) state.req.zona=P.get('colonia');
+if(P.get('q')){state.req.what=P.get('q').trim().slice(0,60);searchFromD()}
+render();
+</script>
+</body>
+</html>
